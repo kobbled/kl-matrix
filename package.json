@@ -1,0 +1,25 @@
+{
+  "manver" : "1",
+  "project" : "matrix",
+  "description" : "matrix operations",
+  "version" : "0.0.1",
+  "license" : "Apache 2.0",
+  "author" : "kobbled",
+  "source" : [
+    "src/matrix.kl",
+    "src/classes/carr10.kl"
+  ],
+  "includes" : [
+    "include",
+    "include/classes"
+  ],
+  "tests" : [
+    "src/test/test_matrix.kl"
+  ],
+  "depends" : [
+    "KUnit",
+    "math",
+    "errors",
+    "Strings"
+  ]
+}
