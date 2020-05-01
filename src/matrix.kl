@@ -1,0 +1,57 @@
+PROGRAM matrix
+%NOBUSYLAMP
+%COMMENT = 'matrix library'
+%NOLOCKGROUP
+%NOPAUSE = COMMAND + TPENABLE + ERROR
+
+%include matrix.klt
+
+%include matrix.klh
+%include math.klh
+
+-- public :
+
+ROUTINE full1R
+  BEGIN
+    init1r(arr, OP_FULL, number)
+  END full1R
+
+ROUTINE rand1R
+  BEGIN
+    init1r(arr, OP_RANDOM, 0)
+  END rand1R
+
+ROUTINE zeros1R
+  BEGIN
+    init1r(arr, OP_ZEROS, 0)
+  END zeros1R
+
+ROUTINE ones1R
+  BEGIN
+    init1r(arr, OP_ONES, 0)
+  END ones1R
+
+-- private :
+ROUTINE init1r
+  VAR
+    i : INTEGER
+    tme  : INTEGER
+  BEGIN
+    FOR i=1 TO ARRAY_LEN(arr) DO
+        SELECT opts OF
+          CASE (OP_ZEROS) :
+            arr[i] = 0.0
+          CASE (OP_FULL) :
+            arr[i] = val
+          CASE (OP_RANDOM) :
+            GET_TIME(tme)
+            SRAND(tme*i)
+            arr[i] = RAND
+          CASE (OP_ONES) :
+            arr[i] = 1.0
+        ENDSELECT
+    ENDFOR
+  END init1r
+
+BEGIN
+END matrix

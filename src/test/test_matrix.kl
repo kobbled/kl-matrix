@@ -1,0 +1,51 @@
+PROGRAM test_matrix
+%NOLOCKGROUP
+
+VAR
+  entry : INTEGER
+  status : INTEGER
+
+
+%include matrix.klh
+%include kunit.klh
+
+
+ROUTINE t_zeros1r : BOOLEAN
+  VAR
+    i : INTEGER
+    arr : ARRAY[10] OF REAL
+    sol_arr : ARRAY[10] OF REAL
+  BEGIN
+    FOR i=1 TO ARRAY_LEN(sol_arr) DO
+      sol_arr[i] = 0
+    ENDFOR
+
+    zeros1r(arr)
+
+    RETURN(kunit_eq_arr(sol_arr, arr))
+  END t_zeros1r
+
+ROUTINE t_full1r : BOOLEAN
+  VAR
+    i : INTEGER
+    arr : ARRAY[10] OF REAL
+    sol_arr : ARRAY[10] OF REAL
+    val : REAL
+  BEGIN
+    val = 4.5
+
+    FOR i=1 TO ARRAY_LEN(sol_arr) DO
+      sol_arr[i] = val
+    ENDFOR
+
+    full1r(arr, val)
+
+    RETURN(kunit_eq_arr(sol_arr, arr))
+  END t_full1r
+
+BEGIN
+  kunit_test('test_zeros_1d()', t_zeros1r)
+  kunit_test('test_full_1d()', t_full1r)
+
+  kunit_done
+END test_matrix

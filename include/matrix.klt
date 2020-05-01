@@ -1,0 +1,11 @@
+%ifndef matrix_t
+%define matrix_t
+
+--initialization options
+%define OP_ZEROS 1
+%define OP_EYE 2
+%define OP_FULL 3
+%define OP_RANDOM 4
+%define OP_ONES 5
+
+%endif --matrix_t
