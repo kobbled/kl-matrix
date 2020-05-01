@@ -1,0 +1,18 @@
+%mode push
+%mode quote "$"
+%define ASIS(x) x
+%define header_guard ASIS(type_name)_t
+%defeval header_if $%ifndef header_guard$ 
+%defeval header_def $%define header_guard$
+%mode pop
+
+--start header file
+header_if -- ifndef class
+header_def -- define class
+
+%include matrix.klt
+
+-- declare type
+t_arr2d(t_rows,t_columns,type_name,REAL)
+
+%endif --end type

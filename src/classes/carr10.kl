@@ -1,0 +1,24 @@
+-- name class
+%defeval class_name carr10
+-- declare type
+%mode push
+%mode string QQQ "`" "`" "\\"
+%define ASIS(x) x
+%define SILENT(x) ASIS()
+%define def2d(n,r,c) SILENT(`%defeval type_name n` `%defeval t_rows r` `%defeval t_columns c`)
+def2d(t_carr10,10,10)
+%mode pop
+
+%defeval h_file 2dArray
+%defeval t_file 2dArray
+
+%mode push
+%mode quote "`"
+%define T_HEADER t_file.klt
+%define HEADER h_file.klh
+%defeval inc_types `%include T_HEADER`
+%defeval inc_head `%include HEADER`
+%mode pop
+
+-- include base class
+%include 2dArray.klc

@@ -5,10 +5,30 @@ VAR
   entry : INTEGER
   status : INTEGER
 
+-- types carr10
+%defeval type_name t_carr10
+%define t_rows 10
+%define t_columns 10
+%include 2dArray.klt
+--
+-- types carr305
+%defeval type_name t_carr305
+%define t_rows 30
+%define t_columns 5
+%include 2dArray.klt
+--
 
 %include matrix.klh
 %include kunit.klh
 
+-- class carr10
+%defeval class_name carr10
+%include 2dArray.klh
+--
+-- class carr305
+%defeval class_name carr305
+%include 2dArray.klh
+--
 
 ROUTINE t_zeros1r : BOOLEAN
   VAR
@@ -43,9 +63,54 @@ ROUTINE t_full1r : BOOLEAN
     RETURN(kunit_eq_arr(sol_arr, arr))
   END t_full1r
 
+ROUTINE t_carr10 : BOOLEAN
+  VAR
+    sol_arr : arry(type_name)
+    sol_row : arrx(type_name)
+    i,j : INTEGER
+    val : REAL
+  BEGIN
+    val = 100
+
+    FOR i=1 TO ARRAY_LEN(sol_arr) DO
+      FOR j=1 TO ARRAY_LEN(sol_row) DO
+        sol_row[j] = val
+      ENDFOR
+      sol_arr[i] = sol_row
+    ENDFOR
+
+    carr10__full(val)
+
+    RETURN( carr10__testing(sol_arr) )
+
+  END t_carr10
+
+ROUTINE t_carr305 : BOOLEAN
+  VAR
+    sol_arr : arry(type_name)
+    sol_row : arrx(type_name)
+    i,j : INTEGER
+    val : REAL
+  BEGIN
+    val = 100
+
+    FOR i=1 TO ARRAY_LEN(sol_arr) DO
+      FOR j=1 TO ARRAY_LEN(sol_row) DO
+        sol_row[j] = val
+      ENDFOR
+      sol_arr[i] = sol_row
+    ENDFOR
+
+    carr305__full(val)
+
+    RETURN( carr305__testing(sol_arr) )
+
+  END t_carr305
+
 BEGIN
   kunit_test('test_zeros_1d()', t_zeros1r)
   kunit_test('test_full_1d()', t_full1r)
+  kunit_test('test_full_carr10()', t_carr10)
 
   kunit_done
 END test_matrix

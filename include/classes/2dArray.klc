@@ -1,0 +1,144 @@
+PROGRAM class_name
+%NOBUSYLAMP
+%COMMENT = '2d abstraction'
+%NOLOCKGROUP
+%UNINITVARS
+
+inc_types -- class.klt
+
+--declare object member variables
+VAR
+  arr   : arry(type_name)
+
+
+inc_head -- class.klh
+
+%include math.klh
+%include strings.klh
+%include errors.klh
+%include kunit.klh
+
+--define local classes
+-- ********************
+%define ASIS(x) x
+%defeval funcname(f) ASIS(class_name)_#1
+
+%defeval constructor funcname(init)
+%defeval desctructor funcname(dsct)
+%defeval full funcname(full)
+%defeval zeros funcname(zero)
+%defeval ones funcname(ones)
+%defeval random funcname(rand)
+%defeval eye funcname(eye)
+%defeval arr_func funcname(cnst)
+%defeval testing funcname(test)
+-- ********************
+
+ROUTINE constructor
+  BEGIN
+    arr_func (OP_FULL, value)
+  END constructor
+
+ROUTINE desctructor
+  VAR
+    i,j : INTEGER
+    row  : arrx(type_name)
+    uninitr : REAL
+  BEGIN
+    FOR i=1 TO ARRAY_LEN(arr) DO
+      FOR j=1 TO ARRAY_LEN(row) DO
+        row[j] = uninitr
+      ENDFOR
+      arr[i] = row 
+    ENDFOR
+  END desctructor
+
+ROUTINE full
+  BEGIN
+    arr_func (OP_FULL, number)
+  END full
+
+ROUTINE zeros
+  BEGIN
+    arr_func (OP_ZEROS,0)
+  END zeros
+
+ROUTINE ones
+  BEGIN
+    arr_func (OP_ONES, 0)
+  END ones
+
+ROUTINE random
+  BEGIN
+    arr_func (OP_RANDOM, 0)
+  END random
+
+-- private
+ROUTINE arr_func
+  VAR
+    i, j : INTEGER
+    tme  : INTEGER
+    row  : arrx(type_name)
+    rrand : REAL
+  BEGIN
+    FOR i=1 TO ARRAY_LEN(arr) DO
+      FOR j=1 TO ARRAY_LEN(row) DO
+        SELECT operation OF
+          CASE (OP_ZEROS) :
+            row[j] = 0.0
+          CASE (OP_EYE) :
+            IF (i=j) THEN
+              row[j] = 1.0
+            ELSE
+              row[j] = 0.0
+            ENDIF
+          CASE (OP_FULL) :
+            row[j] = value
+          CASE (OP_RANDOM) :
+            GET_TIME(tme)
+            SRAND(tme*i*j)
+            rrand = RAND
+            row[j] = rrand
+          CASE (OP_ONES) :
+            row[j] = 1.0
+        ENDSELECT
+      ENDFOR
+      arr[i] = row
+    ENDFOR
+  END arr_func
+
+-- testing routines
+ROUTINE testing
+  VAR
+    i,j : INTEGER
+    row  : arrx(type_name)
+    expect_row : arrx(type_name)
+    b : BOOLEAN
+    error_msg : STRING[254]
+    ent, status : INTEGER
+  BEGIN
+    IF ARRAY_LEN(expected) > ARRAY_LEN(arr) THEN
+      error_msg = 'rows are not the same size'
+      SET_VAR(ent, 'kunit', 'error_msg', error_msg, status)
+      CHK_STAT(status)
+      RETURN(false)
+    ENDIF
+
+    FOR i=1 TO ARRAY_LEN(arr) DO
+      row = arr[i]
+      expect_row = expected[i]  
+
+      b = kunit_eq_arr(expect_row, row)
+      IF b = FALSE THEN
+        error_msg = 'Row ' + i_to_s(i) + 'is not equal.'
+        SET_VAR(ent, 'kunit', 'error_msg', error_msg, status)
+        CHK_STAT(status)
+        RETURN(false)
+      ENDIF
+    ENDFOR
+
+    RETURN(true)
+  END testing
+
+BEGIN
+END class_name
