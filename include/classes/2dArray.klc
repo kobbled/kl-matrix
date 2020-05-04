@@ -4,14 +4,24 @@ PROGRAM class_name
 %NOLOCKGROUP
 %UNINITVARS
 
-inc_types -- class.klt
+%include oop.m
+%include include_header.m
+%include define_type.m
+
+-- declare type
+t_arr2d(t_rows,t_columns,type_name,REAL)
 
 --declare object member variables
 VAR
   arr   : arry(type_name)
 
+%include matrix.klt
 
-inc_head -- class.klh
+%mode push
+%mode quote "$"
+%defeval inc_header $%include TEMP_H$
+%mode pop
+inc_header -- class.klh
 
 %include math.klh
 %include strings.klh
@@ -20,9 +30,6 @@ inc_head -- class.klh
 
 --define local classes
 -- ********************
-%define ASIS(x) x
-%defeval funcname(f) ASIS(class_name)_#1
-
 %defeval constructor funcname(init)
 %defeval desctructor funcname(dsct)
 %defeval full funcname(full)

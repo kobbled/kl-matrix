@@ -1,16 +1,7 @@
-%mode push
-%mode string QQQ "`" "`" "\\"
-%define ASIS(x) x
-%define SILENT(x) ASIS()
-%define EVAL(n,f) SILENT(`%defeval TEMP0 n` `%defeval TEMP1 f` `%define alias ASIS(class_name)ASIS(__)ASIS(TEMP0)` `%define func ASIS(class_name)ASIS(_)ASIS(TEMP1)`)
-%mode pop
-
-%mode push
-%mode quote "$"
-%define header_guard ASIS(class_name)_h
-%defeval header_if $%ifndef header_guard$ 
-%defeval header_def $%define header_guard$
-%mode pop
+--header
+%include header_guard.m
+--oop
+%include oop.m
 
 --start header file
 header_if -- ifndef class
@@ -18,7 +9,6 @@ header_def -- define class
 
 -- Declare functions
 -- ***************
-%defeval funcname(f) ASIS(class_name)_#1
   -- public
 ROUTINE funcname(init) (value : REAL) FROM class_name
 ROUTINE funcname(dsct)  FROM class_name
@@ -40,35 +30,35 @@ ROUTINE funcname(test) (expected : arry(type_name) ) : BOOLEAN FROM class_name
 %mode push
 %mode quote "$"
 EVAL(constructor,init)
-%defeval dec_constructor $%define alias func$
+%defeval def_constructor $%define alias func$
 EVAL(desctructor,dsct)
-%defeval dec_desctructor $%define alias func$
+%defeval def_desctructor $%define alias func$
 EVAL(full,full)
-%defeval dec_full $%define alias func$
+%defeval def_full $%define alias func$
 EVAL(zeros,zero)
-%defeval dec_zeros $%define alias func$
+%defeval def_zeros $%define alias func$
 EVAL(ones,ones)
-%defeval dec_ones $%define alias func$
+%defeval def_ones $%define alias func$
 EVAL(random,rand)
-%defeval dec_random $%define alias func$
+%defeval def_random $%define alias func$
 EVAL(eye,eye)
-%defeval dec_eye $%define alias func$
+%defeval def_eye $%define alias func$
 EVAL(arr_func,cnst)
-%defeval dec_arr_func $%define alias func$
+%defeval def_arr_func $%define alias func$
 EVAL(testing,test)
-%defeval dec_testing $%define alias func$
+%defeval def_testing $%define alias func$
 
 %mode pop
 
 -- instantiate
-dec_constructor
-dec_desctructor
-dec_full
-dec_zeros
-dec_ones
-dec_random
-dec_eye
-dec_arr_func
-dec_testing
+def_constructor
+def_desctructor
+def_full
+def_zeros
+def_ones
+def_random
+def_eye
+def_arr_func
+def_testing
 
 %endif --end header

@@ -5,10 +5,10 @@
 %include include_header.m
 
 -- defines header and type files
-header_file(2dArray.klh)
+header_file("2dArray.klh")
 
 -- declare type
-def2d(t_carr10,10,10)
+def2d(t_carr305,30,5)
 
 -- include base class
 %include 2dArray.klc

@@ -7,7 +7,8 @@
   "author" : "kobbled",
   "source" : [
     "src/matrix.kl",
-    "src/classes/carr10.kl"
+    "src/classes/carr10.kl",
+    "src/classes/carr305.kl"
   ],
   "includes" : [
     "include",
@@ -20,6 +21,7 @@
     "KUnit",
     "math",
     "errors",
-    "Strings"
+    "Strings",
+    "ktransw-macros"
   ]
 }

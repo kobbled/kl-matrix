@@ -5,28 +5,32 @@ VAR
   entry : INTEGER
   status : INTEGER
 
+
+-- ** TYPES **
+%include define_type.m
+%define T_CARR10_ t_carr10
+%define T_CARR305_ t_carr305
+
 -- types carr10
-%defeval type_name t_carr10
-%define t_rows 10
-%define t_columns 10
-%include 2dArray.klt
+t_arr2d(10,10,T_CARR10_,REAL)
 --
 -- types carr305
-%defeval type_name t_carr305
-%define t_rows 30
-%define t_columns 5
-%include 2dArray.klt
+t_arr2d(30,5,T_CARR305_,REAL)
 --
+
+-- ** FUNCTIONS **
 
 %include matrix.klh
 %include kunit.klh
 
 -- class carr10
 %defeval class_name carr10
+%defeval type_name T_CARR10_
 %include 2dArray.klh
 --
 -- class carr305
 %defeval class_name carr305
+%defeval type_name T_CARR305_
 %include 2dArray.klh
 --
 
@@ -65,8 +69,8 @@ ROUTINE t_full1r : BOOLEAN
 
 ROUTINE t_carr10 : BOOLEAN
   VAR
-    sol_arr : arry(type_name)
-    sol_row : arrx(type_name)
+    sol_arr : arry(T_CARR10_)
+    sol_row : arrx(T_CARR10_)
     i,j : INTEGER
     val : REAL
   BEGIN
@@ -87,8 +91,8 @@ ROUTINE t_carr10 : BOOLEAN
 
 ROUTINE t_carr305 : BOOLEAN
   VAR
-    sol_arr : arry(type_name)
-    sol_row : arrx(type_name)
+    sol_arr : arry(T_CARR305_)
+    sol_row : arrx(T_CARR305_)
     i,j : INTEGER
     val : REAL
   BEGIN
