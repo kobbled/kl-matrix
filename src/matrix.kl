@@ -16,20 +16,45 @@ ROUTINE full1R
     init1r(arr, OP_FULL, number)
   END full1R
 
+ROUTINE full2R
+  BEGIN
+    init2r(arr, row, OP_FULL, number)
+  END full2R
+
 ROUTINE rand1R
   BEGIN
     init1r(arr, OP_RANDOM, 0)
   END rand1R
+
+ROUTINE rand2R
+  BEGIN
+    init2r(arr, row, OP_RANDOM, 0)
+  END rand2R
 
 ROUTINE zeros1R
   BEGIN
     init1r(arr, OP_ZEROS, 0)
   END zeros1R
 
+ROUTINE zeros2R
+  BEGIN
+    init2r(arr, row, OP_ZEROS, 0)
+  END zeros2R
+
 ROUTINE ones1R
   BEGIN
     init1r(arr, OP_ONES, 0)
   END ones1R
+
+ROUTINE ones2R
+  BEGIN
+    init2r(arr, row, OP_ONES, 0)
+  END ones2R
+
+ROUTINE eye2R
+  BEGIN
+    init2r(arr, row, OP_EYE, 0)
+  END eye2R
 
 -- private :
 ROUTINE init1r
@@ -52,6 +77,38 @@ ROUTINE init1r
         ENDSELECT
     ENDFOR
   END init1r
+
+-- private :
+ROUTINE init2r
+  VAR
+    i,j : INTEGER
+    tme  : INTEGER
+    rrand : REAL
+  BEGIN
+    FOR i=1 TO ARRAY_LEN(arr) DO
+      FOR j=1 TO ARRAY_LEN(row) DO
+        SELECT opts OF
+          CASE (OP_ZEROS) :
+            arr[i,j] = 0.0
+          CASE (OP_EYE) :
+            IF (i=j) THEN
+              arr[i,j] = 1.0
+            ELSE
+              arr[i,j] = 0.0
+            ENDIF
+          CASE (OP_FULL) :
+            arr[i,j] = val
+          CASE (OP_RANDOM) :
+            GET_TIME(tme)
+            SRAND(tme*i*j)
+            rrand = RAND
+            arr[i,j] = rrand
+          CASE (OP_ONES) :
+            arr[i,j] = 1.0
+        ENDSELECT
+      ENDFOR
+    ENDFOR
+  END init2r
 
 BEGIN
 END matrix

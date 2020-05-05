@@ -2,9 +2,15 @@
 %define matrix_h
 
 ROUTINE full1R(arr : ARRAY[*] OF REAL; number : REAL) FROM matrix
+ROUTINE full2R(arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL; number : REAL) FROM matrix
 ROUTINE rand1R(arr : ARRAY[*] OF REAL) FROM matrix
+ROUTINE rand2R(arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 ROUTINE zeros1R(arr : ARRAY[*] OF REAL) FROM matrix
+ROUTINE zeros2R(arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 ROUTINE ones1R(arr : ARRAY[*] OF REAL) FROM matrix
+ROUTINE ones2R(arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
+ROUTINE eye2R(arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 
 ROUTINE init1r(arr : ARRAY[*] OF REAL; opts : INTEGER; val : REAL) FROM matrix
+ROUTINE init2r(arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL; opts : INTEGER; val : REAL) FROM matrix
 %endif --matrix_h
