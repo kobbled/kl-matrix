@@ -8,10 +8,10 @@ PROGRAM test_matrix
 %define T_CARR305_ t_carr305
 
 -- types carr10
-t_arr2d(10,10,T_CARR10_,REAL)
+t_arr2d_ref(10,10,T_CARR10_,REAL,carr10)
 --
 -- types carr305
-t_arr2d(30,5,T_CARR305_,REAL)
+t_arr2d_ref(30,5,T_CARR305_,REAL,carr305)
 --
 
 -- ** FUNCTIONS **
@@ -105,13 +105,13 @@ ROUTINE t_carr10 : BOOLEAN
 
     carr10__full(val)
 
-    RETURN( carr10__testing(sol_arr) )
+    RETURN( carr10__testing (sol_arr) )
 
   END t_carr10
 
 ROUTINE t_carr305 : BOOLEAN
   VAR
-    sol_arr : arry(T_CARR305_)
+    sol_arr : arry(T_CARR305_) 
     sol_row : arrx(T_CARR305_)
     i,j : INTEGER
     val : REAL
@@ -127,7 +127,7 @@ ROUTINE t_carr305 : BOOLEAN
 
     carr305__full(val)
 
-    RETURN( carr305__testing(sol_arr) )
+    RETURN( carr305__testing (sol_arr) )
 
   END t_carr305
 
@@ -136,6 +136,7 @@ BEGIN
   kunit_test('test_full_1d()', t_full1r)
   kunit_test('test_eye()', t_eye2r)
   kunit_test('test_full_carr10()', t_carr10)
+  kunit_test('test_full_carr305()', t_carr305)
 
   kunit_done
 END test_matrix

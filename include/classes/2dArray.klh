@@ -21,7 +21,8 @@ ROUTINE funcname(eye)  FROM class_name
 ROUTINE funcname(cnst) (operation : INTEGER; value : REAL) FROM class_name
 
 --testing routines
-ROUTINE funcname(test) (expected : arry(type_name) ) : BOOLEAN FROM class_name
+ROUTINE funcname(trw) (expected : arrx(type_name); actual : arrx(type_name))  : BOOLEAN FROM class_name
+ROUTINE funcname(test) (expected : arry(type_name)) : BOOLEAN FROM class_name
 
 -- declare namespaced members
 -- ****************** 
@@ -45,6 +46,8 @@ EVAL(eye,eye)
 %defeval def_eye $%define alias func$
 EVAL(arr_func,cnst)
 %defeval def_arr_func $%define alias func$
+EVAL(test_row,trw)
+%defeval def_test_row $%define alias func$
 EVAL(testing,test)
 %defeval def_testing $%define alias func$
 
@@ -59,6 +62,7 @@ def_ones
 def_random
 def_eye
 def_arr_func
+def_test_row
 def_testing
 
 %endif --end header

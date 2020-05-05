@@ -1,11 +1,11 @@
 -- name class
-%defeval class_name carr10
+%defeval class_name carr305
 
 %include define_type.m
 %include include_header.m
 
 -- defines header and type files
-header_file("2dArray.klh")
+header_file(2dArray.klh)
 
 -- declare type
 def2d(t_carr305,30,5)

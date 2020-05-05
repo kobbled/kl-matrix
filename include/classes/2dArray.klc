@@ -13,7 +13,7 @@ t_arr2d(t_rows,t_columns,type_name,REAL)
 
 --declare object member variables
 VAR
-  arr   : arry(type_name)
+  arr      : arry(type_name)
 
 %include matrix.klt
 
@@ -38,6 +38,7 @@ inc_header -- class.klh
 %defeval random funcname(rand)
 %defeval eye funcname(eye)
 %defeval arr_func funcname(cnst)
+%defeval test_row funcname(trw)
 %defeval testing funcname(test)
 -- ********************
 
@@ -115,6 +116,51 @@ ROUTINE arr_func
   END arr_func
 
 -- testing routines
+ROUTINE test_row
+  VAR
+    i : INTEGER
+    ok : BOOLEAN
+    assrtn_count : INTEGER
+    error_msg : STRING[254]
+    ent, status : INTEGER
+  BEGIN
+    ok = TRUE
+
+    GET_VAR(ent, 'kunit', 'assrtn_count', assrtn_count, status)
+    assrtn_count = assrtn_count + 1
+    SET_VAR(ent, 'kunit', 'assrtn_count', assrtn_count, status)
+
+    --actual test array should be equal to or greater than expected
+    -- loop through arrays and check values
+    FOR i = 1 TO ARRAY_LEN(actual) DO
+      -- disregard comparision if item is outside of expected
+      -- shape
+      IF (i <= ARRAY_LEN(expected)) THEN
+        -- handle uninitialized
+        IF UNINIT(actual[i]) THEN
+          error_msg = 'Expected ' + r_to_s(expected[i]) + ' but got UNINIT'
+          RETURN(false)
+        ENDIF
+
+        IF expected[i] <> actual[i] THEN
+          ok = FALSE
+          GO TO skiploop
+        ENDIF
+
+      ENDIF
+    ENDFOR
+
+    skiploop::
+
+    IF ok THEN
+      RETURN(true)
+    ELSE
+      error_msg = 'Expected ' + r_to_s(expected[i]) + ' but got ' + r_to_s(actual[i]) + &
+                  ', on index ' + i_to_s(i) + ' of array.'
+      RETURN(false)
+    ENDIF
+  END test_row
+
 ROUTINE testing
   VAR
     i,j : INTEGER
@@ -135,7 +181,7 @@ ROUTINE testing
       row = arr[i]
       expect_row = expected[i]  
 
-      b = kunit_eq_arr(expect_row, row)
+      b = test_row(expect_row, row)
       IF b = FALSE THEN
         error_msg = 'Row ' + i_to_s(i) + 'is not equal.'
         SET_VAR(ent, 'kunit', 'error_msg', error_msg, status)
