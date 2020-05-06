@@ -54,6 +54,8 @@ EVAL(testing,test)
 %mode pop
 
 -- instantiate
+-- ** This has to be seperated from quote mode
+-- ** above for some reason
 def_constructor
 def_desctructor
 def_full
