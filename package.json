@@ -6,9 +6,7 @@
   "license" : "Apache 2.0",
   "author" : "kobbled",
   "source" : [
-    "src/matrix.kl",
-    "src/classes/carr10.kl",
-    "src/classes/carr305.kl"
+    "src/matrix.kl"
   ],
   "includes" : [
     "include",

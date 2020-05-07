@@ -5,10 +5,9 @@ PROGRAM class_name
 %UNINITVARS
 
 %include oop.m
-%include include_header.m
-%include define_type.m
 
 -- declare type
+%include define_type.m
 t_arr2d(t_rows,t_columns,type_name,REAL)
 
 --declare object member variables
@@ -17,11 +16,7 @@ VAR
 
 %include matrix.klt
 
-%mode push
-%mode quote "$"
-%defeval inc_header $%include TEMP_H$
-%mode pop
-inc_header -- class.klh
+%include 2dArray.klh -- class.klh
 
 %include math.klh
 %include strings.klh

@@ -20,14 +20,10 @@ t_arr2d_ref(30,5,T_CARR305_,REAL,carr305)
 %include kunit.klh
 
 -- class carr10
-%defeval class_name carr10
-%defeval type_name T_CARR10_
-%include 2dArray.klh
+%class carr10('2dArray.klc','2dArray.klh','carr10.klt')
 --
 -- class carr305
-%defeval class_name carr305
-%defeval type_name T_CARR305_
-%include 2dArray.klh
+%class carr305('2dArray.klc','2dArray.klh','carr305.klt')
 --
 
 ROUTINE t_zeros1r : BOOLEAN

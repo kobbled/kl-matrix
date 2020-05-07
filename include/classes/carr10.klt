@@ -1,0 +1,5 @@
+%include define_type.m
+-- declare type
+%defeval type_name t_carr10
+%defeval t_rows 10
+%defeval t_columns 10
