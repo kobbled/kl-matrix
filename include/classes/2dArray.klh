@@ -1,70 +1,39 @@
 --header
 %include header_guard.m
 --oop
-%include oop.m
+%include namespace.m
 
 --start header file
 header_if -- ifndef class
 header_def -- define class
 
+-- namespaced members in format <class_name>__<func_name>
+declare(class_name,constructor,class_name,init)
+declare(class_name,desctructor,class_name,dsct)
+declare(class_name,full,class_name,full)
+declare(class_name,zeros,class_name,zero)
+declare(class_name,ones,class_name,ones)
+declare(class_name,random,class_name,rand)
+declare(class_name,eye,class_name,eye)
+declare(class_name,arr_func,class_name,cnst)
+declare(class_name,test_row,class_name,trw)
+declare(class_name,testing,class_name,test)
+
 -- Declare functions
 -- ***************
   -- public
-ROUTINE funcname(init) (value : REAL) FROM class_name
-ROUTINE funcname(dsct)  FROM class_name
-ROUTINE funcname(full) (number : REAL) FROM class_name
-ROUTINE funcname(zero) FROM class_name
-ROUTINE funcname(ones)  FROM class_name
-ROUTINE funcname(rand)  FROM class_name
-ROUTINE funcname(eye)  FROM class_name
+ROUTINE classfunc(init) (value : REAL) FROM class_name
+ROUTINE classfunc(dsct)  FROM class_name
+ROUTINE classfunc(full) (number : REAL) FROM class_name
+ROUTINE classfunc(zero) FROM class_name
+ROUTINE classfunc(ones)  FROM class_name
+ROUTINE classfunc(rand)  FROM class_name
+ROUTINE classfunc(eye)  FROM class_name
 -- private
-ROUTINE funcname(cnst) (operation : INTEGER; value : REAL) FROM class_name
+ROUTINE classfunc(cnst) (operation : INTEGER; value : REAL) FROM class_name
 
 --testing routines
-ROUTINE funcname(trw) (expected : arrx(type_name); actual : arrx(type_name))  : BOOLEAN FROM class_name
-ROUTINE funcname(test) (expected : arry(type_name)) : BOOLEAN FROM class_name
-
--- declare namespaced members
--- ****************** 
--- will be in the format <class_name>__<func_name>
--- functions list
-%mode push
-%mode quote "$"
-EVAL(constructor,init)
-%defeval def_constructor $%define alias func$
-EVAL(desctructor,dsct)
-%defeval def_desctructor $%define alias func$
-EVAL(full,full)
-%defeval def_full $%define alias func$
-EVAL(zeros,zero)
-%defeval def_zeros $%define alias func$
-EVAL(ones,ones)
-%defeval def_ones $%define alias func$
-EVAL(random,rand)
-%defeval def_random $%define alias func$
-EVAL(eye,eye)
-%defeval def_eye $%define alias func$
-EVAL(arr_func,cnst)
-%defeval def_arr_func $%define alias func$
-EVAL(test_row,trw)
-%defeval def_test_row $%define alias func$
-EVAL(testing,test)
-%defeval def_testing $%define alias func$
-
-%mode pop
-
--- instantiate
--- ** This has to be seperated from quote mode
--- ** above for some reason
-def_constructor
-def_desctructor
-def_full
-def_zeros
-def_ones
-def_random
-def_eye
-def_arr_func
-def_test_row
-def_testing
+ROUTINE classfunc(trw) (expected : arrx(type_name); actual : arrx(type_name))  : BOOLEAN FROM class_name
+ROUTINE classfunc(test) (expected : arry(type_name)) : BOOLEAN FROM class_name
 
 %endif --end header

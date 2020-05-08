@@ -11,53 +11,53 @@ PROGRAM matrix
 
 -- public :
 
-ROUTINE full1R
+ROUTINE matrix__full_1D
   BEGIN
-    init1r(arr, OP_FULL, number)
-  END full1R
+    matrix__init_1D(arr, OP_FULL, number)
+  END matrix__full_1D
 
-ROUTINE full2R
+ROUTINE matrix__full_2D
   BEGIN
-    init2r(arr, row, OP_FULL, number)
-  END full2R
+    matrix__init_2D(arr, row, OP_FULL, number)
+  END matrix__full_2D
 
-ROUTINE rand1R
+ROUTINE matrix__random_1D
   BEGIN
-    init1r(arr, OP_RANDOM, 0)
-  END rand1R
+    matrix__init_1D(arr, OP_RANDOM, 0)
+  END matrix__random_1D
 
-ROUTINE rand2R
+ROUTINE matrix__random_2D
   BEGIN
-    init2r(arr, row, OP_RANDOM, 0)
-  END rand2R
+    matrix__init_2D(arr, row, OP_RANDOM, 0)
+  END matrix__random_2D
 
-ROUTINE zeros1R
+ROUTINE matrix__zeros_1D
   BEGIN
-    init1r(arr, OP_ZEROS, 0)
-  END zeros1R
+    matrix__init_1D(arr, OP_ZEROS, 0)
+  END matrix__zeros_1D
 
-ROUTINE zeros2R
+ROUTINE matrix__zeros_2D
   BEGIN
-    init2r(arr, row, OP_ZEROS, 0)
-  END zeros2R
+    matrix__init_2D(arr, row, OP_ZEROS, 0)
+  END matrix__zeros_2D
 
-ROUTINE ones1R
+ROUTINE matrix__ones_1D
   BEGIN
-    init1r(arr, OP_ONES, 0)
-  END ones1R
+    matrix__init_1D(arr, OP_ONES, 0)
+  END matrix__ones_1D
 
-ROUTINE ones2R
+ROUTINE matrix__ones_2D
   BEGIN
-    init2r(arr, row, OP_ONES, 0)
-  END ones2R
+    matrix__init_2D(arr, row, OP_ONES, 0)
+  END matrix__ones_2D
 
-ROUTINE eye2R
+ROUTINE matrix__eye
   BEGIN
-    init2r(arr, row, OP_EYE, 0)
-  END eye2R
+    matrix__init_2D(arr, row, OP_EYE, 0)
+  END matrix__eye
 
 -- private :
-ROUTINE init1r
+ROUTINE matrix__init_1D
   VAR
     i : INTEGER
     tme  : INTEGER
@@ -76,10 +76,10 @@ ROUTINE init1r
             arr[i] = 1.0
         ENDSELECT
     ENDFOR
-  END init1r
+  END matrix__init_1D
 
 -- private :
-ROUTINE init2r
+ROUTINE matrix__init_2D
   VAR
     i,j : INTEGER
     tme  : INTEGER
@@ -108,7 +108,7 @@ ROUTINE init2r
         ENDSELECT
       ENDFOR
     ENDFOR
-  END init2r
+  END matrix__init_2D
 
 BEGIN
 END matrix

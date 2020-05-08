@@ -4,7 +4,7 @@ PROGRAM class_name
 %NOLOCKGROUP
 %UNINITVARS
 
-%include oop.m
+%include namespace.m
 
 -- declare type
 %include define_type.m
@@ -25,21 +25,21 @@ VAR
 
 --define local classes
 -- ********************
-%defeval constructor funcname(init)
-%defeval desctructor funcname(dsct)
-%defeval full funcname(full)
-%defeval zeros funcname(zero)
-%defeval ones funcname(ones)
-%defeval random funcname(rand)
-%defeval eye funcname(eye)
-%defeval arr_func funcname(cnst)
-%defeval test_row funcname(trw)
-%defeval testing funcname(test)
+%defeval constructor classfunc(init)
+%defeval desctructor classfunc(dsct)
+%defeval full classfunc(full)
+%defeval zeros classfunc(zero)
+%defeval ones classfunc(ones)
+%defeval random classfunc(rand)
+%defeval eye classfunc(eye)
+%defeval _init classfunc(cnst)
+%defeval test_row classfunc(trw)
+%defeval testing classfunc(test)
 -- ********************
 
 ROUTINE constructor
   BEGIN
-    arr_func (OP_FULL, value)
+    _init (OP_FULL, value)
   END constructor
 
 ROUTINE desctructor
@@ -58,26 +58,26 @@ ROUTINE desctructor
 
 ROUTINE full
   BEGIN
-    arr_func (OP_FULL, number)
+    _init (OP_FULL, number)
   END full
 
 ROUTINE zeros
   BEGIN
-    arr_func (OP_ZEROS,0)
+    _init (OP_ZEROS,0)
   END zeros
 
 ROUTINE ones
   BEGIN
-    arr_func (OP_ONES, 0)
+    _init (OP_ONES, 0)
   END ones
 
 ROUTINE random
   BEGIN
-    arr_func (OP_RANDOM, 0)
+    _init (OP_RANDOM, 0)
   END random
 
 -- private
-ROUTINE arr_func
+ROUTINE _init
   VAR
     i, j : INTEGER
     tme  : INTEGER
@@ -108,7 +108,7 @@ ROUTINE arr_func
       ENDFOR
       arr[i] = row
     ENDFOR
-  END arr_func
+  END _init
 
 -- testing routines
 ROUTINE test_row

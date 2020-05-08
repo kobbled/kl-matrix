@@ -36,7 +36,7 @@ ROUTINE t_zeros1r : BOOLEAN
       sol_arr[i] = 0
     ENDFOR
 
-    zeros1r(arr)
+    matrix__zeros_1D(arr)
 
     RETURN(kunit_eq_arr(sol_arr, arr))
   END t_zeros1r
@@ -54,7 +54,7 @@ ROUTINE t_full1r : BOOLEAN
       sol_arr[i] = val
     ENDFOR
 
-    full1r(arr, val)
+    matrix__full_1D(arr, val)
 
     RETURN(kunit_eq_arr(sol_arr, arr))
   END t_full1r
@@ -78,7 +78,7 @@ ROUTINE t_eye2r : BOOLEAN
       ENDFOR
     ENDFOR
 
-    eye2R(arr, row)
+    matrix__eye(arr, row)
 
     RETURN(kunit_eq_2d(sol_row, row, sol_arr, arr))  
   END t_eye2r
