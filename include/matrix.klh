@@ -7,8 +7,7 @@
 %define prog_name_alias mtrx
 
 -- namespaced members in format <prog_name_alias>__<func_name>
-declare(prog_name,init_1D,prog_name_alias,init1r)
-declare(prog_name,init_2D,prog_name_alias,init2r)
+
 declare(prog_name,full_1D,prog_name_alias,full1R)
 declare(prog_name,full_2D,prog_name_alias,full2R)
 declare(prog_name,random_1D,prog_name_alias,rand1R)
@@ -18,6 +17,9 @@ declare(prog_name,zeros_2D,prog_name_alias,zros2R)
 declare(prog_name,ones_1D,prog_name_alias,ones1R)
 declare(prog_name,ones_2D,prog_name_alias,ones2R)
 declare(prog_name,eye,prog_name_alias,eye)
+declare(prog_name,linspace,prog_name_alias,lspce_r)
+declare(prog_name,init_1D,prog_name_alias,init1r)
+declare(prog_name,init_2D,prog_name_alias,init2r)
 
 ROUTINE matrix__full_1D (arr : ARRAY[*] OF REAL; number : REAL) FROM matrix
 ROUTINE matrix__full_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL; number : REAL) FROM matrix
@@ -28,6 +30,7 @@ ROUTINE matrix__zeros_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM
 ROUTINE matrix__ones_1D (arr : ARRAY[*] OF REAL) FROM matrix
 ROUTINE matrix__ones_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 ROUTINE matrix__eye (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
+ROUTINE matrix__linspace (start_idx, stop_idx : REAL ; arr : ARRAY[*] OF REAL ; endpoint : BOOLEAN) FROM matrix
 
 ROUTINE matrix__init_1D (arr : ARRAY[*] OF REAL; opts : INTEGER; val : REAL) FROM matrix
 ROUTINE matrix__init_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL; opts : INTEGER; val : REAL) FROM matrix

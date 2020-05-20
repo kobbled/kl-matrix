@@ -56,6 +56,19 @@ ROUTINE matrix__eye
     matrix__init_2D(arr, row, OP_EYE, 0)
   END matrix__eye
 
+ROUTINE matrix__linspace
+  VAR
+    i : INTEGER
+  BEGIN
+    FOR i=1 TO ARRAY_LEN(arr) DO
+      IF endpoint THEN
+        arr[i] = ((stop_idx-start_idx)/(ARRAY_LEN(arr)-1)*(i-1)) + start_idx
+      ELSE
+        arr[i] = ((stop_idx-start_idx)/(ARRAY_LEN(arr))*(i-1)) + start_idx
+      ENDIF
+    ENDFOR
+  END matrix__linspace
+
 -- private :
 ROUTINE matrix__init_1D
   VAR

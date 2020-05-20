@@ -17,6 +17,7 @@ t_arr2d_ref(30,5,T_CARR305_,REAL,carr305)
 -- ** FUNCTIONS **
 
 %include matrix.klh
+%include strings.klh
 %include kunit.klh
 
 -- class carr10
@@ -127,12 +128,33 @@ ROUTINE t_carr305 : BOOLEAN
 
   END t_carr305
 
+ROUTINE t_linspace : BOOLEAN
+  VAR
+    arr, sol_arr, arr2, sol_arr2 : ARRAY[5] OF REAL
+    s_arr : ARRAY[5] OF STRING[6]
+  BEGIN
+    --with endpoint
+    s_to_arr('2,2.25,2.5,2.75,3',',', s_arr)
+    sarr_to_rarr(s_arr, sol_arr)
+
+    matrix__linspace(2,3,arr,TRUE)
+    --without endpoint
+    s_to_arr('2,2.2,2.4,2.6,2.8',',', s_arr)
+    sarr_to_rarr(s_arr, sol_arr2)
+
+    matrix__linspace(2,3,arr2,FALSE)
+
+    RETURN(kunit_eq_arr(sol_arr, arr) AND &
+           kunit_eq_arr(sol_arr2, arr2) )
+  END t_linspace
+
 BEGIN
   kunit_test('test_zeros_1d()', t_zeros1r)
   kunit_test('test_full_1d()', t_full1r)
   kunit_test('test_eye()', t_eye2r)
   kunit_test('test_full_carr10()', t_carr10)
   kunit_test('test_full_carr305()', t_carr305)
+  kunit_test('test linear space', t_linspace)
 
   kunit_done
 END test_matrix
