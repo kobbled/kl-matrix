@@ -131,16 +131,13 @@ ROUTINE t_carr305 : BOOLEAN
 ROUTINE t_linspace : BOOLEAN
   VAR
     arr, sol_arr, arr2, sol_arr2 : ARRAY[5] OF REAL
-    s_arr : ARRAY[5] OF STRING[6]
   BEGIN
     --with endpoint
-    s_to_arr('2,2.25,2.5,2.75,3',',', s_arr)
-    sarr_to_rarr(s_arr, sol_arr)
+    s_to_rarr('2,2.25,2.5,2.75,3',',', sol_arr)
 
     matrix__linspace(2,3,arr,TRUE)
     --without endpoint
-    s_to_arr('2,2.2,2.4,2.6,2.8',',', s_arr)
-    sarr_to_rarr(s_arr, sol_arr2)
+    s_to_rarr('2,2.2,2.4,2.6,2.8',',', sol_arr2)
 
     matrix__linspace(2,3,arr2,FALSE)
 
