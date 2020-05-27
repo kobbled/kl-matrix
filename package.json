@@ -13,7 +13,7 @@
     "include/classes"
   ],
   "tests" : [
-    "src/test/test_matrix.kl"
+    "test/test_matrix.kl"
   ],
   "depends" : [
     "KUnit",
