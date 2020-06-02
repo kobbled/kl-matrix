@@ -83,8 +83,8 @@ ROUTINE matrix__init_1D
             arr[i] = val
           CASE (OP_RANDOM) :
             GET_TIME(tme)
-            SRAND(tme*i)
-            arr[i] = RAND
+            math__srand(tme*i)
+            arr[i] = math__rand
           CASE (OP_ONES) :
             arr[i] = 1.0
         ENDSELECT
@@ -113,8 +113,8 @@ ROUTINE matrix__init_2D
             arr[i,j] = val
           CASE (OP_RANDOM) :
             GET_TIME(tme)
-            SRAND(tme*i*j)
-            rrand = RAND
+            math__srand(tme*i*j)
+            rrand = math__rand
             arr[i,j] = rrand
           CASE (OP_ONES) :
             arr[i,j] = 1.0
