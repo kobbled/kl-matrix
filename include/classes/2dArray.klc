@@ -99,8 +99,8 @@ ROUTINE _init
             row[j] = value
           CASE (OP_RANDOM) :
             GET_TIME(tme)
-            SRAND(tme*i*j)
-            rrand = RAND
+            math__srand(tme*i*j)
+            rrand = math__rand
             row[j] = rrand
           CASE (OP_ONES) :
             row[j] = 1.0
