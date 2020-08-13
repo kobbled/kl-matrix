@@ -23,20 +23,6 @@ VAR
 %include errors.klh
 %include kunit.klh
 
---define local classes
--- ********************
-%defeval constructor classfunc(init)
-%defeval desctructor classfunc(dsct)
-%defeval full classfunc(full)
-%defeval zeros classfunc(zero)
-%defeval ones classfunc(ones)
-%defeval random classfunc(rand)
-%defeval eye classfunc(eye)
-%defeval _init classfunc(cnst)
-%defeval test_row classfunc(trw)
-%defeval testing classfunc(test)
--- ********************
-
 ROUTINE constructor
   BEGIN
     _init (OP_FULL, value)

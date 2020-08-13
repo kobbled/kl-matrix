@@ -7,33 +7,31 @@
 header_if -- ifndef class
 header_def -- define class
 
--- namespaced members in format <class_name>__<func_name>
-declare(class_name,constructor,class_name,init)
-declare(class_name,desctructor,class_name,dsct)
-declare(class_name,full,class_name,full)
-declare(class_name,zeros,class_name,zero)
-declare(class_name,ones,class_name,ones)
-declare(class_name,random,class_name,rand)
-declare(class_name,eye,class_name,eye)
-declare(class_name,arr_func,class_name,cnst)
-declare(class_name,test_row,class_name,trw)
-declare(class_name,testing,class_name,test)
-
--- Declare functions
+-- declare_member functions
 -- ***************
   -- public
-ROUTINE classfunc(init) (value : REAL) FROM class_name
-ROUTINE classfunc(dsct)  FROM class_name
-ROUTINE classfunc(full) (number : REAL) FROM class_name
-ROUTINE classfunc(zero) FROM class_name
-ROUTINE classfunc(ones)  FROM class_name
-ROUTINE classfunc(rand)  FROM class_name
-ROUTINE classfunc(eye)  FROM class_name
+declare_member(class_name,constructor,class_name,init)
+ROUTINE constructor (value : REAL) FROM class_name
+declare_member(class_name,desctructor,class_name,dsct)
+ROUTINE desctructor  FROM class_name
+declare_member(class_name,full,class_name,full)
+ROUTINE full (number : REAL) FROM class_name
+declare_member(class_name,zeros,class_name,zero)
+ROUTINE zeros FROM class_name
+declare_member(class_name,ones,class_name,ones)
+ROUTINE ones  FROM class_name
+declare_member(class_name,random,class_name,rand)
+ROUTINE random  FROM class_name
+declare_member(class_name,eye,class_name,eye)
+ROUTINE eye  FROM class_name
 -- private
-ROUTINE classfunc(cnst) (operation : INTEGER; value : REAL) FROM class_name
+declare_member(class_name,arr_func,class_name,cnst)
+ROUTINE arr_func (operation : INTEGER; value : REAL) FROM class_name
 
 --testing routines
-ROUTINE classfunc(trw) (expected : arrx(type_name); actual : arrx(type_name))  : BOOLEAN FROM class_name
-ROUTINE classfunc(test) (expected : arry(type_name)) : BOOLEAN FROM class_name
+declare_member(class_name,test_row,class_name,trw)
+ROUTINE test_row (expected : arrx(type_name); actual : arrx(type_name))  : BOOLEAN FROM class_name
+declare_member(class_name,testing,class_name,test)
+ROUTINE testing (expected : arry(type_name)) : BOOLEAN FROM class_name
 
 %endif --end header
