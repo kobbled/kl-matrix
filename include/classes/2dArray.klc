@@ -16,16 +16,18 @@ VAR
 
 %include matrix.klt
 
+ROUTINE init_(operation : INTEGER; value : REAL) FROM class_name
+
 %include 2dArray.klh -- class.klh
 
-%include math.klh
-%include strings.klh
+%from math.klh %import srand, rand
+%from strings.klh %import r_to_s, i_to_s
 %include errors.klh
 %include kunit.klh
 
 ROUTINE constructor
   BEGIN
-    _init (OP_FULL, value)
+    init_ (OP_FULL, value)
   END constructor
 
 ROUTINE desctructor
@@ -44,26 +46,26 @@ ROUTINE desctructor
 
 ROUTINE full
   BEGIN
-    _init (OP_FULL, number)
+    init_ (OP_FULL, number)
   END full
 
 ROUTINE zeros
   BEGIN
-    _init (OP_ZEROS,0)
+    init_ (OP_ZEROS,0)
   END zeros
 
 ROUTINE ones
   BEGIN
-    _init (OP_ONES, 0)
+    init_ (OP_ONES, 0)
   END ones
 
 ROUTINE random
   BEGIN
-    _init (OP_RANDOM, 0)
+    init_ (OP_RANDOM, 0)
   END random
 
 -- private
-ROUTINE _init
+ROUTINE init_
   VAR
     i, j : INTEGER
     tme  : INTEGER
@@ -94,7 +96,7 @@ ROUTINE _init
       ENDFOR
       arr[i] = row
     ENDFOR
-  END _init
+  END init_
 
 -- testing routines
 ROUTINE test_row

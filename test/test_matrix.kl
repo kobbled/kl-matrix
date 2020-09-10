@@ -17,7 +17,7 @@ t_arr2d_ref(30,5,T_CARR305_,REAL,carr305)
 -- ** FUNCTIONS **
 
 %include matrix.klh
-%include strings.klh
+%from strings.klh %import s_to_rarr
 %include kunit.klh
 
 -- class carr10

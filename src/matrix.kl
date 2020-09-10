@@ -7,7 +7,7 @@ PROGRAM matrix
 %include matrix.klt
 
 %include matrix.klh
-%include math.klh
+%from math.klh %import srand, rand
 
 -- public :
 
