@@ -4,10 +4,13 @@ PROGRAM matrix
 %NOLOCKGROUP
 %NOPAUSE = COMMAND + TPENABLE + ERROR
 
+%include errors.klt
 %include matrix.klt
 
-%include matrix.klh
+%include errors.klh
 %from math.klh %import srand, rand
+%include matrix.klh
+%include matrix.private.klh
 
 -- public :
 
@@ -69,7 +72,67 @@ ROUTINE matrix__linspace
     ENDFOR
   END matrix__linspace
 
+ROUTINE matrix__add_1D
+  BEGIN
+    matrix__operations_1D(arr1, arr2, OP_ADD, out_arr)
+  END matrix__add_1D
+
+ROUTINE matrix__sub_1D
+  BEGIN
+    matrix__operations_1D(arr1, arr2, OP_SUBTRACT, out_arr)
+  END matrix__sub_1D
+
+ROUTINE matrix__mul_1D
+  BEGIN
+    matrix__operations_1D(arr1, arr2, OP_MULTIPLY, out_arr)
+  END matrix__mul_1D
+
+ROUTINE matrix__div_1D
+  BEGIN
+    matrix__operations_1D(arr1, arr2, OP_DIVIDE, out_arr)
+  END matrix__div_1D
+
 -- private :
+
+ROUTINE matrix__operations_1D
+  VAR
+    i : INTEGER
+  BEGIN
+    IF ARRAY_LEN(arr1) <> ARRAY_LEN(arr2) THEN
+      karelError(ARR_LEN_MISMATCH, 'add_1D: arrays are not the same size', ER_ABORT)
+    ENDIF
+
+    IF ARRAY_LEN(out_arr) <> ARRAY_LEN(arr1) THEN
+      karelError(ARR_LEN_MISMATCH, 'add_1D: output array is not the same size as input array', ER_WARN)
+    ENDIF
+
+    FOR i=1 TO ARRAY_LEN(out_arr) DO
+      IF (i <= ARRAY_LEN(arr1)) AND NOT (UNINIT(arr1[i]) AND UNINIT(arr2[i])) THEN
+        IF UNINIT(arr2[i]) THEN
+          out_arr[i] = arr1[i]
+        ELSE IF UNINIT(arr1[i]) THEN
+          out_arr[i] = arr1[i]
+        ELSE
+          SELECT opts OF
+            CASE (OP_ADD) :
+              out_arr[i] = arr1[i] + arr2[i]
+            CASE (OP_SUBTRACT) :
+              out_arr[i] = arr1[i] - arr2[i]
+            CASE (OP_MULTIPLY) :
+              out_arr[i] = arr1[i] * arr2[i]
+            CASE (OP_DIVIDE) :
+              IF arr2[i] = 0 THEN
+                out_arr[i] = arr1[i]
+              ELSE
+                out_arr[i] = arr1[i] / arr2[i]
+              ENDIF
+          ENDSELECT
+        ENDIF
+        ENDIF
+      ENDIF
+    ENDFOR
+  END matrix__operations_1D
+
 ROUTINE matrix__init_1D
   VAR
     i : INTEGER
@@ -91,7 +154,6 @@ ROUTINE matrix__init_1D
     ENDFOR
   END matrix__init_1D
 
--- private :
 ROUTINE matrix__init_2D
   VAR
     i,j : INTEGER

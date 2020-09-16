@@ -145,6 +145,37 @@ ROUTINE t_linspace : BOOLEAN
            kunit_eq_arr(sol_arr2, arr2) )
   END t_linspace
 
+ROUTINE t_ops_1r : BOOLEAN
+  VAR
+    arr1, arr2 : ARRAY[5] OF REAL
+    op_arr1, op_arr2, op_arr3, op_arr4 : ARRAY[5] OF REAL
+    sol_arr1, sol_arr2, sol_arr3, sol_arr4 : ARRAY[5] OF REAL
+  BEGIN
+    --init arr1
+    s_to_rarr('3,10,-90,30.25,-30',',', arr1)
+    --init arr2
+    s_to_rarr('2,0.5,90,360,0',',', arr2)
+
+    --add solution
+    s_to_rarr('5,10.5,0,390.25,-30',',', sol_arr1)
+    --subtract solution
+    s_to_rarr('1,9.5,-180,-329.75,-30',',', sol_arr2)
+    --multiply solution
+    s_to_rarr('6,5,-8100,10890,0',',', sol_arr3)
+    --divide solution
+    s_to_rarr('1.5,20,-1,0.0841,-30',',', sol_arr4)
+
+    --run operations
+    matrix__add_1D(arr1, arr2, op_arr1)
+    matrix__sub_1D(arr1, arr2, op_arr2)
+    matrix__mul_1D(arr1, arr2, op_arr3)
+    matrix__div_1D(arr1, arr2, op_arr4)
+
+    RETURN(kunit_eq_arr(sol_arr1, op_arr1) AND kunit_eq_arr(sol_arr2, op_arr2) AND &
+           kunit_eq_arr(sol_arr3, op_arr3) AND kunit_eq_arr(sol_arr4, op_arr4))
+
+  END t_ops_1r
+
 BEGIN
   kunit_test('test_zeros_1d()', t_zeros1r)
   kunit_test('test_full_1d()', t_full1r)
@@ -152,6 +183,7 @@ BEGIN
   kunit_test('test_full_carr10()', t_carr10)
   kunit_test('test_full_carr305()', t_carr305)
   kunit_test('test linear space', t_linspace)
+  kunit_test('test +/-/*// 1D rarrs', t_ops_1r)
 
   kunit_done
 END test_matrix

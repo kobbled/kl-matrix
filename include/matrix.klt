@@ -7,5 +7,9 @@
 %define OP_FULL 3
 %define OP_RANDOM 4
 %define OP_ONES 5
+%define OP_ADD 6
+%define OP_SUBTRACT 7
+%define OP_MULTIPLY 8
+%define OP_DIVIDE 9
 
 %endif --matrix_t
