@@ -44,9 +44,47 @@ ROUTINE init_(operation : INTEGER; value : inner_type) FROM class_name
 %endif
 
 ROUTINE constructor
+  VAR
+%defeval row_length %eval t_columns*8
+    row_str : ARRAY[t_rows] OF STRING[row_length]
+    row : ARRAY[t_columns] OF inner_type
   BEGIN
-    init_ (OP_FULL, value)
+    i=1 ; j=1 ;
+    -- split row delimiter
+    s_to_arr(sarr, row_delim, row_str)
+
+    FOR i=1 TO ARRAY_LEN(row_str) DO
+%ifeq inner_type INTEGER
+      s_to_iarr(row_str[i], col_delim, row)
+%endif
+%ifeq inner_type REAL
+      s_to_rarr(row_str[i], col_delim, row)
+%endif
+      FOR j=1 TO ARRAY_LEN(this_row) DO
+        this_row[j] = row[j]
+      ENDFOR
+      this[i] = this_row 
+    ENDFOR
   END constructor
+
+ROUTINE create_row
+  VAR
+    erow : arrx(type_name)
+    row : ARRAY[t_columns] OF inner_type
+  BEGIN
+%ifeq inner_type INTEGER
+    s_to_iarr(sarr, col_delim, row)
+%endif
+%ifeq inner_type REAL
+    s_to_rarr(sarr, col_delim, row)
+%endif
+    i=1
+    FOR i=1 TO ARRAY_LEN(erow) DO
+      erow[i] = row[i]
+    ENDFOR
+
+    RETURN(erow)
+  END create_row
 
 ROUTINE desctructor
   VAR
@@ -109,6 +147,24 @@ ROUTINE set_row_from_array
     ENDFOR
     this[row_idx] = this_row
   END set_row_from_array
+
+--conversions
+ROUTINE convert_to_array
+  BEGIN
+    IF ARRAY_LEN(arr) <> ARRAY_LEN(this) THEN
+      karelError(ARR_LEN_MISMATCH, 'class name and array are not the same size', ER_ABORT)
+    ENDIF
+
+    i=1 ; j=1 ;
+    FOR i=1 TO ARRAY_LEN(this) DO
+      this_row = this[i]
+      FOR j=1 TO ARRAY_LEN(this_row) DO
+        arr[i,j] = this_row[j]
+      ENDFOR
+    ENDFOR
+  END convert_to_array
+
+-- initializations
 ROUTINE full
   BEGIN
     init_ (OP_FULL, number)

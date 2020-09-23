@@ -12,7 +12,10 @@ header_def -- define class
 -- public
 --declare matrix
 declare_member(class_name,constructor,class_name,init)
-ROUTINE constructor (value : REAL) FROM class_name
+ROUTINE constructor (sarr : STRING; col_delim : STRING; row_delim : STRING) FROM class_name
+-- initialize row
+declare_member(class_name,create_row,class_name,crow)
+ROUTINE create_row (sarr : STRING; col_delim : STRING) : arrx(type_name) FROM class_name
 declare_member(class_name,desctructor,class_name,dsct)
 ROUTINE desctructor  FROM class_name
 
@@ -28,6 +31,11 @@ declare_member(class_name,set_from_array,class_name,star)
 ROUTINE set_from_array(arr : ARRAY[*,*] OF inner_type) FROM class_name
 declare_member(class_name,set_row_from_array,class_name,srfa)
 ROUTINE set_row_from_array(row_idx : INTEGER; row : ARRAY[*] OF inner_type) FROM class_name
+-- conversions
+declare_member(class_name,convert_to_array,class_name,cvar)
+ROUTINE convert_to_array(arr : ARRAY[*,*] OF inner_type) FROM class_name
+
+
 declare_member(class_name,full,class_name,full)
 ROUTINE full (number : inner_type) FROM class_name
 declare_member(class_name,zeros,class_name,zero)
