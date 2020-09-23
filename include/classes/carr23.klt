@@ -1,0 +1,10 @@
+%include define_type.m
+-- declare type
+%defeval type_name t_carr23
+%defeval t_rows 2
+%defeval t_columns 3
+--atomic type of matrix
+%defeval inner_type INTEGER
+
+--define if testing features are needed
+%define UNIT_TESTING
