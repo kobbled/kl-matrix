@@ -9,13 +9,27 @@ header_def -- define class
 
 -- declare_member functions
 -- ***************
-  -- public
+-- public
+--declare matrix
 declare_member(class_name,constructor,class_name,init)
 ROUTINE constructor (value : REAL) FROM class_name
 declare_member(class_name,desctructor,class_name,dsct)
 ROUTINE desctructor  FROM class_name
+
+-- getters
+declare_member(class_name,get_matrix,class_name,get)
+ROUTINE get_matrix : arry(type_name) FROM class_name
+-- setters
+declare_member(class_name,set_matrix,class_name,set)
+ROUTINE set_matrix(arr : arry(type_name)) FROM class_name
+declare_member(class_name,set_row,class_name,setr)
+ROUTINE set_row(row_idx : INTEGER; row : arrx(type_name)) FROM class_name
+declare_member(class_name,set_from_array,class_name,star)
+ROUTINE set_from_array(arr : ARRAY[*,*] OF inner_type) FROM class_name
+declare_member(class_name,set_row_from_array,class_name,srfa)
+ROUTINE set_row_from_array(row_idx : INTEGER; row : ARRAY[*] OF inner_type) FROM class_name
 declare_member(class_name,full,class_name,full)
-ROUTINE full (number : REAL) FROM class_name
+ROUTINE full (number : inner_type) FROM class_name
 declare_member(class_name,zeros,class_name,zero)
 ROUTINE zeros FROM class_name
 declare_member(class_name,ones,class_name,ones)
@@ -24,14 +38,13 @@ declare_member(class_name,random,class_name,rand)
 ROUTINE random  FROM class_name
 declare_member(class_name,eye,class_name,eye)
 ROUTINE eye  FROM class_name
--- private
-declare_member(class_name,arr_func,class_name,cnst)
-ROUTINE arr_func (operation : INTEGER; value : REAL) FROM class_name
 
 --testing routines
+%ifdef UNIT_TESTING
 declare_member(class_name,test_row,class_name,trw)
 ROUTINE test_row (expected : arrx(type_name); actual : arrx(type_name))  : BOOLEAN FROM class_name
 declare_member(class_name,testing,class_name,test)
 ROUTINE testing (expected : arry(type_name)) : BOOLEAN FROM class_name
+%endif UNIT_TESTING
 
 %endif --end header

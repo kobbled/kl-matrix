@@ -3,3 +3,8 @@
 %defeval type_name t_carr305
 %defeval t_rows 30
 %defeval t_columns 5
+--atomic type of matrix
+%defeval inner_type REAL
+
+--define if testing features are needed
+%define UNIT_TESTING
