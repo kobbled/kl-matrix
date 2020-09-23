@@ -19,45 +19,20 @@ ROUTINE matrix__full_1D
     matrix__init_1D(arr, OP_FULL, number)
   END matrix__full_1D
 
-ROUTINE matrix__full_2D
-  BEGIN
-    matrix__init_2D(arr, row, OP_FULL, number)
-  END matrix__full_2D
-
 ROUTINE matrix__random_1D
   BEGIN
     matrix__init_1D(arr, OP_RANDOM, 0)
   END matrix__random_1D
-
-ROUTINE matrix__random_2D
-  BEGIN
-    matrix__init_2D(arr, row, OP_RANDOM, 0)
-  END matrix__random_2D
 
 ROUTINE matrix__zeros_1D
   BEGIN
     matrix__init_1D(arr, OP_ZEROS, 0)
   END matrix__zeros_1D
 
-ROUTINE matrix__zeros_2D
-  BEGIN
-    matrix__init_2D(arr, row, OP_ZEROS, 0)
-  END matrix__zeros_2D
-
 ROUTINE matrix__ones_1D
   BEGIN
     matrix__init_1D(arr, OP_ONES, 0)
   END matrix__ones_1D
-
-ROUTINE matrix__ones_2D
-  BEGIN
-    matrix__init_2D(arr, row, OP_ONES, 0)
-  END matrix__ones_2D
-
-ROUTINE matrix__eye
-  BEGIN
-    matrix__init_2D(arr, row, OP_EYE, 0)
-  END matrix__eye
 
 ROUTINE matrix__linspace
   VAR
@@ -99,11 +74,11 @@ ROUTINE matrix__operations_1D
     i : INTEGER
   BEGIN
     IF ARRAY_LEN(arr1) <> ARRAY_LEN(arr2) THEN
-      karelError(ARR_LEN_MISMATCH, 'add_1D: arrays are not the same size', ER_ABORT)
+      karelError(ARR_LEN_MISMATCH, 'opts_1D: arrays are not the same size', ER_ABORT)
     ENDIF
 
     IF ARRAY_LEN(out_arr) <> ARRAY_LEN(arr1) THEN
-      karelError(ARR_LEN_MISMATCH, 'add_1D: output array is not the same size as input array', ER_WARN)
+      karelError(ARR_LEN_MISMATCH, 'opts_1D: output array is not the same size as input array', ER_WARN)
     ENDIF
 
     FOR i=1 TO ARRAY_LEN(out_arr) DO
@@ -126,6 +101,8 @@ ROUTINE matrix__operations_1D
               ELSE
                 out_arr[i] = arr1[i] / arr2[i]
               ENDIF
+            ELSE :
+              karelError(INVALID_INDEX, 'operations_1D: Invalid operator selected', ER_ABORT)
           ENDSELECT
         ENDIF
         ENDIF
@@ -150,40 +127,11 @@ ROUTINE matrix__init_1D
             arr[i] = math__rand
           CASE (OP_ONES) :
             arr[i] = 1.0
+          ELSE :
+            karelError(INVALID_INDEX, 'init_1D: Invalid operator selected', ER_ABORT)
         ENDSELECT
     ENDFOR
   END matrix__init_1D
-
-ROUTINE matrix__init_2D
-  VAR
-    i,j : INTEGER
-    tme  : INTEGER
-    rrand : REAL
-  BEGIN
-    FOR i=1 TO ARRAY_LEN(arr) DO
-      FOR j=1 TO ARRAY_LEN(row) DO
-        SELECT opts OF
-          CASE (OP_ZEROS) :
-            arr[i,j] = 0.0
-          CASE (OP_EYE) :
-            IF (i=j) THEN
-              arr[i,j] = 1.0
-            ELSE
-              arr[i,j] = 0.0
-            ENDIF
-          CASE (OP_FULL) :
-            arr[i,j] = val
-          CASE (OP_RANDOM) :
-            GET_TIME(tme)
-            math__srand(tme*i*j)
-            rrand = math__rand
-            arr[i,j] = rrand
-          CASE (OP_ONES) :
-            arr[i,j] = 1.0
-        ENDSELECT
-      ENDFOR
-    ENDFOR
-  END matrix__init_2D
 
 BEGIN
 END matrix

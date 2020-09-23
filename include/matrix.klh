@@ -9,22 +9,12 @@
 --public
 declare_function(prog_name,full_1D,prog_name_alias,full1R)
 ROUTINE matrix__full_1D (arr : ARRAY[*] OF REAL; number : REAL) FROM matrix
-declare_function(prog_name,full_2D,prog_name_alias,full2R)
-ROUTINE matrix__full_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL; number : REAL) FROM matrix
 declare_function(prog_name,random_1D,prog_name_alias,rand1R)
 ROUTINE matrix__random_1D (arr : ARRAY[*] OF REAL) FROM matrix
-declare_function(prog_name,random_2D,prog_name_alias,rand2R)
-ROUTINE matrix__random_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 declare_function(prog_name,zeros_1D,prog_name_alias,zros1R)
 ROUTINE matrix__zeros_1D (arr : ARRAY[*] OF REAL) FROM matrix
-declare_function(prog_name,zeros_2D,prog_name_alias,zros2R)
-ROUTINE matrix__zeros_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 declare_function(prog_name,ones_1D,prog_name_alias,ones1R)
 ROUTINE matrix__ones_1D (arr : ARRAY[*] OF REAL) FROM matrix
-declare_function(prog_name,ones_2D,prog_name_alias,ones2R)
-ROUTINE matrix__ones_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
-declare_function(prog_name,eye,prog_name_alias,eye)
-ROUTINE matrix__eye (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 declare_function(prog_name,linspace,prog_name_alias,lspce_r)
 ROUTINE matrix__linspace (start_idx, stop_idx : REAL ; arr : ARRAY[*] OF REAL ; endpoint : BOOLEAN) FROM matrix
 

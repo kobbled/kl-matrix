@@ -11,6 +11,4 @@ declare_function(prog_name,operations_1D,prog_name_alias,ops1r)
 ROUTINE matrix__operations_1D (arr1, arr2 : ARRAY[*] OF REAL; opts : INTEGER; out_arr : ARRAY[*] OF REAL) FROM matrix
 declare_function(prog_name,init_1D,prog_name_alias,init1r)
 ROUTINE matrix__init_1D (arr : ARRAY[*] OF REAL; opts : INTEGER; val : REAL) FROM matrix
-declare_function(prog_name,init_2D,prog_name_alias,init2r)
-ROUTINE matrix__init_2D (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL; opts : INTEGER; val : REAL) FROM matrix
 %endif --matrix_private_h
