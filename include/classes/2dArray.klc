@@ -21,6 +21,7 @@ VAR
 %include matrix.klt
 
 ROUTINE init_(operation : INTEGER; value : inner_type) FROM class_name
+ROUTINE operations_(operation : INTEGER; arr2  : arry(type_name)) FROM class_name
 
 %include 2dArray.klh -- class.klh
 
@@ -185,6 +186,17 @@ ROUTINE random
     init_ (OP_RANDOM, 0)
   END random
 
+--operations
+ROUTINE add
+  BEGIN
+    operations_ (OP_ADD, arr2)
+  END add
+
+ROUTINE subtract
+  BEGIN
+    operations_ (OP_SUBTRACT, arr2)
+  END subtract
+
 -- private
 ROUTINE init_
   VAR
@@ -227,6 +239,28 @@ ROUTINE init_
       this[i] = this_row
     ENDFOR
   END init_
+
+ROUTINE operations_
+  VAR
+    row2  : arrx(type_name)
+  BEGIN
+    i=1 ; j=1 ;
+    FOR i=1 TO ARRAY_LEN(this) DO
+      this_row = this[i]
+      row2 = arr2[i]
+      FOR j=1 TO ARRAY_LEN(this_row) DO
+        IF NOT (UNINIT(this_row[j]) AND UNINIT(row2[j])) THEN
+          SELECT operation OF
+            CASE (OP_ADD) :
+              this_row[j] = this_row[j] + row2[j]
+            CASE (OP_SUBTRACT) :
+              this_row[j] = this_row[j] - row2[j]
+          ENDSELECT
+        ENDIF
+      ENDFOR
+      this[i] = this_row
+    ENDFOR
+  END operations_
 
 -- testing routines
 %ifdef UNIT_TESTING

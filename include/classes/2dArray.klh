@@ -46,6 +46,11 @@ declare_member(class_name,random,class_name,rand)
 ROUTINE random  FROM class_name
 declare_member(class_name,eye,class_name,eye)
 ROUTINE eye  FROM class_name
+--operations
+declare_member(class_name,add,class_name,add)
+ROUTINE add (arr2  : arry(type_name)) FROM class_name
+declare_member(class_name,subtract,class_name,subt)
+ROUTINE subtract (arr2  : arry(type_name)) FROM class_name
 
 --testing routines
 %ifdef UNIT_TESTING
