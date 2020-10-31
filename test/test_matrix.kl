@@ -21,7 +21,7 @@ t_arr2d_ref(t_rows,t_columns,TYPE_CARR23,inner_type)
 
 %include matrix.klh
 %include matrix2D.klh
-%from strings.klh %import s_to_rarr
+%from strings.klh %import s_to_rarr, s_to_arr
 %include kunit.klh
 
 -- class carr10
@@ -201,8 +201,29 @@ ROUTINE t_ops_1r : BOOLEAN
 
   END t_ops_1r
 
+ROUTINE t_shift : BOOLEAN
+  VAR
+    arr : ARRAY[5] OF REAL
+    uninit_s, uninit_s2 : ARRAY[5] OF REAL
+    expected1, expected2 : ARRAY[5] OF REAL
+    b : ARRAY[2] OF BOOLEAN
+  BEGIN
+    s_to_rarr('1,2,3,4,5',',', arr)
+
+    matrix__shift_r(arr, 2, TRUE, uninit_s)
+    s_to_rarr('4,5,1,2,3',',', expected1)
+    b[1] = kunit_eq_arr(expected1, arr)
+
+    matrix__shift_r(arr, 3, FALSE, uninit_s2)
+    s_to_rarr('2,3,4,5,1',',', expected2)
+    b[2] = kunit_eq_arr(expected2, arr)
+
+    RETURN(b[1] AND b[2])
+  
+  END t_shift
+
 BEGIN
-  --asserts 53
+  --asserts 55
   kunit_test('test_zeros_1d()', t_zeros1r) -- assert 1
   kunit_test('test_full_1d()', t_full1r) -- assert 1
   kunit_test('test_eye()', t_eye2r) --assert 1
@@ -211,6 +232,7 @@ BEGIN
   kunit_test('test linear space', t_linspace) --assert 2
   kunit_test('test ops on 1D rarrs', t_ops_1r) --assert 4
   kunit_test('test 2d add', t_2dadd) --assert 2
+  kunit_test('shift matrix', t_shift) --assert 2
 
   kunit_done
 END test_matrix

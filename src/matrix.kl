@@ -47,6 +47,68 @@ ROUTINE matrix__linspace
     ENDFOR
   END matrix__linspace
 
+
+ROUTINE matrix__shift_s
+  VAR
+    i, j : INTEGER
+  BEGIN
+    --updown = TRUE shift up
+    --updonw = FALSE shift down
+    IF updown THEN
+      FOR i=1 TO ARRAY_LEN(arr) DO
+        j = ((i+amount) MOD (ARRAY_LEN(arr)+1)) + ((i+amount) DIV (ARRAY_LEN(arr)+1))
+        IF NOT UNINIT(arr[i]) THEN
+          unint_arr[j] = arr[i]
+        ENDIF
+      ENDFOR
+    ELSE
+      FOR i=ARRAY_LEN(arr) DOWNTO 1 DO
+        IF (i-amount) > 0 THEN
+          j = ((i-amount) MOD (ARRAY_LEN(arr)+1))
+        ELSE
+          -- -1 % x is -1 for some reason
+          j = (ARRAY_LEN(arr)+1) + (i-amount-1)
+        ENDIF
+        IF NOT UNINIT(arr[i]) THEN
+          unint_arr[j] = arr[i]
+        ENDIF
+      ENDFOR
+    ENDIF
+
+    arr = unint_arr
+  END matrix__shift_s
+
+ROUTINE matrix__shift_r
+  VAR
+    i, j : INTEGER
+  BEGIN
+    --updown = TRUE shift up
+    --updonw = FALSE shift down
+    IF updown THEN
+      FOR i=1 TO ARRAY_LEN(arr) DO
+        j = ((i+amount) MOD (ARRAY_LEN(arr)+1)) + ((i+amount) DIV (ARRAY_LEN(arr)+1))
+        IF NOT UNINIT(arr[i]) THEN
+          unint_arr[j] = arr[i]
+        ENDIF
+      ENDFOR
+    ELSE
+      FOR i=ARRAY_LEN(arr) DOWNTO 1 DO
+        IF (i-amount) > 0 THEN
+          j = ((i-amount) MOD (ARRAY_LEN(arr)+1))
+        ELSE
+          -- -1 % x is -1 for some reason
+          j = (ARRAY_LEN(arr)+1) + (i-amount-1)
+        ENDIF
+        IF NOT UNINIT(arr[i]) THEN
+          unint_arr[j] = arr[i]
+        ENDIF
+      ENDFOR
+    ENDIF
+
+    arr = unint_arr
+  END matrix__shift_r
+
+
 ROUTINE matrix__add_1D
   BEGIN
     matrix__operations_1D(arr1, arr2, OP_ADD, out_arr)

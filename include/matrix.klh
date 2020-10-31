@@ -18,6 +18,12 @@ ROUTINE matrix__ones_1D (arr : ARRAY[*] OF REAL) FROM matrix
 declare_function(prog_name,linspace,prog_name_alias,lspce_r)
 ROUTINE matrix__linspace (start_idx, stop_idx : REAL ; arr : ARRAY[*] OF REAL ; endpoint : BOOLEAN) FROM matrix
 
+--updown = TRUE shift up ; updown = FALSE shift down
+declare_function(prog_name,shift_s,prog_name_alias,shifts)
+ROUTINE matrix__shift_s(arr : ARRAY[*] OF STRING; amount : INTEGER; updown : BOOLEAN; unint_arr : ARRAY[*] OF STRING) FROM matrix
+declare_function(prog_name,shift_r,prog_name_alias,shiftr)
+ROUTINE matrix__shift_r(arr : ARRAY[*] OF REAL; amount : INTEGER; updown : BOOLEAN; unint_arr : ARRAY[*] OF REAL) FROM matrix
+
 declare_function(prog_name,add_1D,prog_name_alias,add1R)
 ROUTINE matrix__add_1D (arr1, arr2 : ARRAY[*] OF REAL; out_arr : ARRAY[*] OF REAL) FROM matrix
 declare_function(prog_name,sub_1D,prog_name_alias,sub1R)
