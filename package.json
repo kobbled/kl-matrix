@@ -16,11 +16,13 @@
   "tests" : [
     "test/test_matrix.kl"
   ],
-  "depends" : [
+  "tests-depends" : [
     "KUnit",
+    "Strings"
+  ],
+  "depends" : [
     "math",
     "errors",
-    "Strings",
     "ktransw-macros"
   ]
 }
