@@ -212,6 +212,14 @@ ROUTINE random
   END random
 
 --operations
+ROUTINE transpose
+  VAR
+    trans : arry(type_name)
+  BEGIN
+    transpose_(arr, trans)
+    RETURN(trans)
+  END transpose
+
 ROUTINE add
   VAR
     out_arr : arry(type_name)
@@ -236,6 +244,26 @@ ROUTINE smult
     operations_(OP_SMULT, arr, dummy, val, out_arr)
     RETURN(out_arr)
   END smult
+
+ROUTINE mult
+  VAR
+    out_arr : arry(type_name)
+    trans : arry(type_name)
+    row1  : arrx(type_name)
+    row2  : arrx(type_name)
+    d : REAL
+    i, j : INTEGER
+  BEGIN
+    transpose_(arr2, trans)
+
+    FOR i=1 TO t_rows DO
+      row1 = arr1[i]
+      FOR j=1 TO t_columns DO
+        row2 = trans[j]
+        out_arr[i,j] = dot_(row1, row2)
+      ENDFOR
+    ENDFOR
+  END mult
 
 -- private
 ROUTINE init_
@@ -320,6 +348,34 @@ ROUTINE operations_
 
     ENDFOR
   END operations_
+
+ROUTINE transpose_
+  VAR
+    row   : arrx(type_name)
+    i, j : INTEGER
+  BEGIN
+    FOR i=1 TO t_columns DO
+      FOR j=1 TO t_rows DO
+        row[j] = arr[j,i]
+      ENDFOR
+
+      out_arr[i] = row
+    ENDFOR
+
+  END transpose_
+
+ROUTINE dot_
+  VAR
+    i : INTEGER
+    out : inner_type
+  BEGIN
+    out = 0
+    FOR i=1 TO ARRAY_LEN(row1) DO
+      out = out + row1[i]*row2[i]
+    ENDFOR
+
+    RETURN(out)
+  END dot_
 
 -- testing routines
 %ifdef UNIT_TESTING
