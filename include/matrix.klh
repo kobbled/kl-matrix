@@ -17,6 +17,8 @@ declare_function(prog_name,ones_1D,prog_name_alias,ones1R)
 ROUTINE matrix__ones_1D (arr : ARRAY[*] OF REAL) FROM matrix
 declare_function(prog_name,linspace,prog_name_alias,lspce_r)
 ROUTINE matrix__linspace (start_idx, stop_idx : REAL ; arr : ARRAY[*] OF REAL ; endpoint : BOOLEAN) FROM matrix
+declare_function(prog_name,eye,prog_name_alias,eye)
+ROUTINE matrix__eye (arr : ARRAY[*,*] OF REAL; row : ARRAY[*] OF REAL) FROM matrix
 
 --updown = TRUE shift up ; updown = FALSE shift down
 declare_function(prog_name,shift_s,prog_name_alias,shifts)
