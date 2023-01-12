@@ -11,5 +11,6 @@
 %define OP_SUBTRACT 7
 %define OP_MULTIPLY 8
 %define OP_DIVIDE 9
+%define OP_SMULT 8
 
 %endif --matrix_t

@@ -11,24 +11,18 @@ PROGRAM class_name
 
 t_arr2d_ref(t_rows,t_columns,type_name,inner_type)
 
---declare object member variables
-VAR
-  this      : arry(type_name)
-  this_row  : arrx(type_name)
-  i, j : INTEGER
+-- VARS
 
 %include errors.klt
 %include matrix.klt
-
-ROUTINE init_(operation : INTEGER; value : inner_type) FROM class_name
-ROUTINE operations_(operation : INTEGER; arr2  : arry(type_name)) FROM class_name
-
-%include 2dArray.klh -- class.klh
 
 %from math.klh %import srand, rand, rand_int
 %from strings.klh %import r_to_s, i_to_s, s_to_arr, s_to_iarr, s_to_rarr
 %include errors.klh
 %include kunit.klh
+
+%include 2dArray.klh -- class.klh
+%include 2dArray.private.klh
 
 --set functions to handle inner type of the matrix
 --can only be an integer or real
@@ -44,13 +38,17 @@ ROUTINE operations_(operation : INTEGER; arr2  : arry(type_name)) FROM class_nam
 %endif
 %endif
 
-ROUTINE constructor
+--creation methods
+
+ROUTINE create_array_from_string
   VAR
+    out_arr : arry(type_name)
+    subrow : arrx(type_name)
 %defeval row_length %eval t_columns*8
     row_str : ARRAY[t_rows] OF STRING[row_length]
     row : ARRAY[t_columns] OF inner_type
+    i, j : INTEGER
   BEGIN
-    i=1 ; j=1 ;
     -- split row delimiter
     s_to_arr(sarr, row_delim, row_str)
 
@@ -61,17 +59,20 @@ ROUTINE constructor
 %ifeq inner_type REAL
       s_to_rarr(row_str[i], col_delim, row)
 %endif
-      FOR j=1 TO ARRAY_LEN(this_row) DO
-        this_row[j] = row[j]
+      FOR j=1 TO ARRAY_LEN(subrow) DO
+        subrow[j] = row[j]
       ENDFOR
-      this[i] = this_row 
+      out_arr[i] = subrow 
     ENDFOR
-  END constructor
 
-ROUTINE create_row
+    RETURN(out_arr)
+  END create_array_from_string
+
+ROUTINE create_row_from_string
   VAR
     erow : arrx(type_name)
     row : ARRAY[t_columns] OF inner_type
+    i, j : INTEGER
   BEGIN
 %ifeq inner_type INTEGER
     s_to_iarr(sarr, col_delim, row)
@@ -79,144 +80,184 @@ ROUTINE create_row
 %ifeq inner_type REAL
     s_to_rarr(sarr, col_delim, row)
 %endif
+%ifeq inner_type STRING
+    s_to_arr(sarr, col_delim, row)
+%endif
     i=1
     FOR i=1 TO ARRAY_LEN(erow) DO
       erow[i] = row[i]
     ENDFOR
 
     RETURN(erow)
-  END create_row
+  END create_row_from_string
 
-ROUTINE desctructor
+ROUTINE clear
   VAR
     uninitr : inner_type
+    subrow : arrx(type_name)
+    i, j : INTEGER
   BEGIN
-    i=1 ; j=1 ;
-    FOR i=1 TO ARRAY_LEN(this) DO
-      FOR j=1 TO ARRAY_LEN(this_row) DO
-        this_row[j] = uninitr
+    FOR i=1 TO t_rows DO
+      FOR j=1 TO t_columns DO
+        subrow[j] = uninitr
       ENDFOR
-      this[i] = this_row 
+      arr[i] = subrow
     ENDFOR
-  END desctructor
-
---getters
-ROUTINE get_matrix
-  BEGIN
-    RETURN(this)
-  END get_matrix
+  END clear
 
 --setters
-ROUTINE set_matrix
-  BEGIN
-    this = arr
-  END set_matrix
-
 ROUTINE set_row
   BEGIN
-    IF row_idx > ARRAY_LEN(this) THEN karelError(INVALID_INDEX, 'requested row does not exist', ER_ABORT) ; ENDIF
+    IF row_idx > ARRAY_LEN(out_arr) THEN karelError(INVALID_INDEX, 'requested row does not exist', ER_ABORT) ; ENDIF
 
-    this[row_idx] = row
+    out_arr[row_idx] = row
   END set_row
 
 ROUTINE set_from_array
+    VAR
+    i, j : INTEGER
+    subrow : arrx(type_name)
   BEGIN
-    IF ARRAY_LEN(arr) <> ARRAY_LEN(this) THEN
+    IF ARRAY_LEN(in_arr) <> ARRAY_LEN(out_arr) THEN
       karelError(ARR_LEN_MISMATCH, 'class name and array are not the same size', ER_ABORT)
     ENDIF
 
-    i=1 ; j=1 ;
-    FOR i=1 TO ARRAY_LEN(this) DO
-      FOR j=1 TO ARRAY_LEN(this_row) DO
-        this_row[j] = arr[i,j]
+    FOR i=1 TO t_rows DO
+      FOR j=1 TO t_columns DO
+        subrow[j] = in_arr[i,j]
       ENDFOR
-      this[i] = this_row
+      out_arr[i] = subrow
     ENDFOR
   END set_from_array
 
 ROUTINE set_row_from_array
+  VAR
+    subrow : arrx(type_name)
+    i : INTEGER
   BEGIN
-    IF ARRAY_LEN(row) <> ARRAY_LEN(this_row) THEN
+    IF ARRAY_LEN(in_row) <> t_columns THEN
       karelError(ARR_LEN_MISMATCH, 'class name and array rows are not the same size', ER_ABORT)
     ENDIF
     
-    IF row_idx > ARRAY_LEN(this) THEN karelError(INVALID_INDEX, 'requested row does not exist', ER_ABORT) ; ENDIF
+    IF row_idx > t_rows THEN karelError(INVALID_INDEX, 'requested row does not exist', ER_ABORT) ; ENDIF
     
-    i=1 ;
-    FOR i=1 TO ARRAY_LEN(this_row) DO
-      this_row[i] = row[i]
+    FOR i=1 TO t_columns DO
+      subrow[i] = in_row[i]
     ENDFOR
-    this[row_idx] = this_row
+
+    out_arr[row_idx] = subrow
+
   END set_row_from_array
 
 --conversions
 ROUTINE convert_to_array
+  VAR
+    subrow : arrx(type_name)
+    i, j : INTEGER
   BEGIN
-    IF ARRAY_LEN(arr) <> ARRAY_LEN(this) THEN
-      karelError(ARR_LEN_MISMATCH, 'class name and array are not the same size', ER_ABORT)
+    IF ARRAY_LEN(out_arr) <> t_rows THEN
+      karelError(ARR_LEN_MISMATCH, 'rows on array do not match for conversion', ER_ABORT)
+    ENDIF
+    IF ARRAY_LEN(out_arr) <> t_columns THEN
+      karelError(ARR_LEN_MISMATCH, 'columns on array do not match for conversion', ER_ABORT)
     ENDIF
 
-    i=1 ; j=1 ;
-    FOR i=1 TO ARRAY_LEN(this) DO
-      this_row = this[i]
-      FOR j=1 TO ARRAY_LEN(this_row) DO
-        arr[i,j] = this_row[j]
+    FOR i=1 TO t_rows DO
+      subrow = in_arr[i]
+      FOR j=1 TO t_columns DO
+        out_arr[i,j] = subrow[j]
       ENDFOR
     ENDFOR
   END convert_to_array
 
 -- initializations
 ROUTINE full
+  VAR
+    out_arr : arry(type_name)
   BEGIN
-    init_ (OP_FULL, number)
+    init_ (OP_FULL, number, out_arr)
+    RETURN(out_arr)
   END full
 
 ROUTINE zeros
+  VAR
+    out_arr : arry(type_name)
   BEGIN
-    init_ (OP_ZEROS,0)
+    init_ (OP_ZEROS, 0, out_arr)
+    RETURN(out_arr)
   END zeros
 
 ROUTINE ones
+  VAR
+    out_arr : arry(type_name)
   BEGIN
-    init_ (OP_ONES, 0)
+    init_ (OP_ONES, 0, out_arr)
+    RETURN(out_arr)
   END ones
 
-ROUTINE random
+ROUTINE eye
+  VAR
+    out_arr : arry(type_name)
   BEGIN
-    init_ (OP_RANDOM, 0)
+    init_ (OP_EYE, 0, out_arr)
+    RETURN(out_arr)
+  END eye
+
+ROUTINE random
+  VAR
+    out_arr : arry(type_name)
+  BEGIN
+    init_ (OP_RANDOM, 0, out_arr)
+    RETURN(out_arr)
   END random
 
 --operations
 ROUTINE add
+  VAR
+    out_arr : arry(type_name)
   BEGIN
-    operations_ (OP_ADD, arr2)
+    operations_(OP_ADD, arr1, arr2, 0, out_arr)
+    RETURN(out_arr)
   END add
 
 ROUTINE subtract
+  VAR
+    out_arr : arry(type_name)
   BEGIN
-    operations_ (OP_SUBTRACT, arr2)
+    operations_(OP_SUBTRACT, arr1, arr2, 0, out_arr)
+    RETURN(out_arr)
   END subtract
+
+ROUTINE smult
+  VAR
+    dummy : arry(type_name)
+    out_arr : arry(type_name) 
+  BEGIN
+    operations_(OP_SMULT, arr, dummy, val, out_arr)
+    RETURN(out_arr)
+  END smult
 
 -- private
 ROUTINE init_
   VAR
-    tme  : INTEGER
+    subrow : arrx(type_name)
     rrand : inner_type
+    tme  : INTEGER
+    i, j : INTEGER
   BEGIN
-    i=1 ; j=1 ;
-    FOR i=1 TO ARRAY_LEN(this) DO
-      FOR j=1 TO ARRAY_LEN(this_row) DO
+    FOR i=1 TO t_rows DO
+      FOR j=1 TO t_columns DO
         SELECT operation OF
           CASE (OP_ZEROS) :
-            this_row[j] = 0
+            subrow[j] = 0
           CASE (OP_EYE) :
             IF (i=j) THEN
-              this_row[j] = 1
+              subrow[j] = 1
             ELSE
-              this_row[j] = 0
+              subrow[j] = 0
             ENDIF
           CASE (OP_FULL) :
-            this_row[j] = value
+            subrow[j] = default_val
           CASE (OP_RANDOM) :
             GET_TIME(tme)
             math__srand(tme*i*j)
@@ -229,36 +270,54 @@ ROUTINE init_
 %error 'inner_type cannot be used for matrix operations'
 %endif
 %endif
-            this_row[j] = rrand
+            subrow[j] = rrand
           CASE (OP_ONES) :
-            this_row[j] = 1
+            subrow[j] = 1
           ELSE :
               karelError(INVALID_INDEX, ' class_name_init_: Invalid operator selected', ER_ABORT)
         ENDSELECT
       ENDFOR
-      this[i] = this_row
+
+      --return out
+      out_arr[i] = subrow
+
     ENDFOR
   END init_
 
 ROUTINE operations_
   VAR
+    row1  : arrx(type_name)
     row2  : arrx(type_name)
+    subrow : arrx(type_name)
+    i, j : INTEGER
   BEGIN
-    i=1 ; j=1 ;
-    FOR i=1 TO ARRAY_LEN(this) DO
-      this_row = this[i]
+    FOR i=1 TO t_rows DO
+      row1 = arr1[i]
       row2 = arr2[i]
-      FOR j=1 TO ARRAY_LEN(this_row) DO
-        IF NOT (UNINIT(this_row[j]) AND UNINIT(row2[j])) THEN
+      FOR j=1 TO t_columns DO
           SELECT operation OF
             CASE (OP_ADD) :
-              this_row[j] = this_row[j] + row2[j]
+              IF UNINIT(row1[j]) THEN subrow[j] = row2[j]; ENDIF
+              IF UNINIT(row2[j]) THEN subrow[j] = row1[j]; ENDIF
+              IF NOT (UNINIT(row1[j]) AND UNINIT(row2[j])) THEN
+                subrow[j] = row1[j] + row2[j]
+              ENDIF
             CASE (OP_SUBTRACT) :
-              this_row[j] = this_row[j] - row2[j]
+              IF UNINIT(row1[j]) THEN subrow[j] = row2[j]; ENDIF
+              IF UNINIT(row2[j]) THEN subrow[j] = row1[j]; ENDIF
+              IF NOT (UNINIT(row1[j]) AND UNINIT(row2[j])) THEN
+                subrow[j] = row1[j] - row2[j]
+              ENDIF
+            CASE (OP_SMULT) :
+              IF NOT (UNINIT(row1[j])) THEN
+                subrow[j] = scalar*row1[j]
+              ENDIF
           ENDSELECT
-        ENDIF
       ENDFOR
-      this[i] = this_row
+
+      --return out
+      out_arr[i] = subrow
+
     ENDFOR
   END operations_
 
@@ -267,7 +326,7 @@ ROUTINE operations_
 
 ROUTINE test_row
   VAR
-    n : INTEGER
+    n, i : INTEGER
     ok : BOOLEAN
     assrtn_count : INTEGER
     error_msg : STRING[254]
@@ -312,12 +371,13 @@ ROUTINE test_row
 
 ROUTINE testing
   VAR
+    actual_row : arrx(type_name)
     expect_row : arrx(type_name)
     b : BOOLEAN
     error_msg : STRING[254]
-    ent, status : INTEGER
+    i, ent, status : INTEGER
   BEGIN
-    IF ARRAY_LEN(expected) > ARRAY_LEN(this) THEN
+    IF ARRAY_LEN(expected) > ARRAY_LEN(actual) THEN
       error_msg = 'rows are not the same size'
       SET_VAR(ent, 'kunit', 'error_msg', error_msg, status)
       CHK_STAT(status)
@@ -325,11 +385,11 @@ ROUTINE testing
     ENDIF
 
     i=1
-    FOR i=1 TO ARRAY_LEN(this) DO
-      this_row = this[i]
+    FOR i=1 TO ARRAY_LEN(actual) DO
+      actual_row = actual[i]
       expect_row = expected[i]  
 
-      b = test_row(expect_row, this_row)
+      b = test_row(expect_row, actual_row)
       IF b = FALSE THEN
         error_msg = 'Row ' + i_to_s(i) + 'is not equal.'
         SET_VAR(ent, 'kunit', 'error_msg', error_msg, status)

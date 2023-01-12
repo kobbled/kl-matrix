@@ -1,0 +1,2 @@
+ROUTINE init_(operation : INTEGER; default_val : inner_type; out_arr : arry(type_name)) FROM class_name
+ROUTINE operations_(operation : INTEGER; arr1  : arry(type_name); arr2  : arry(type_name); scalar : inner_type; out_arr : arry(type_name)) FROM class_name
