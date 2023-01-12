@@ -6,8 +6,7 @@
   "license" : "Apache 2.0",
   "author" : "kobbled",
   "source" : [
-    "src/matrix.kl",
-    "src/matrix2D.kl"
+    "src/matrix.kl"
   ],
   "includes" : [
     "include",
