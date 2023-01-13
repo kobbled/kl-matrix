@@ -101,11 +101,160 @@ ROUTINE t_add : BOOLEAN
     RETURN( carr23__testing(sol_arr, act_arr) )
 
   END t_add
+
+ROUTINE t_mult : BOOLEAN
+  VAR
+    arr1 : arry(t_carr3)
+    arr2 : arry(t_carr3)
+    sol_arr : arry(t_carr3)
+    act_arr : arry(t_carr3)
+  BEGIN
+    arr1 = carr3__create_array_from_string('1,2,3;' +&
+                                           '4,5,6', ',', ';')
+    arr2 = carr3__create_array_from_string('7 ,8;' +&
+                                           '9 ,10;' +&
+                                           '11,12', ',', ';')
+
+    sol_arr[1,1] = 58 ; sol_arr[1,2] = 64;
+    sol_arr[2,1] = 139 ; sol_arr[2,2] = 154;
+
+    act_arr = carr3__mult(arr1, arr2)
+
+    RETURN(carr3__testing(sol_arr, act_arr))
+
+  END t_mult
+
+ROUTINE t_mult2 : BOOLEAN
+  VAR
+    arr1 : arry(t_carr4)
+    arr2 : arry(t_carr4)
+    sol_arr : arry(t_carr4)
+    act_arr : arry(t_carr4)
+  BEGIN
+    arr1 = carr4__create_array_from_string('5, 7 , 9, 10;' + &
+                                           '2, 3 , 3, 8 ;'  + &
+                                           '8, 10, 2, 3 ;' + &
+                                           '3, 3 , 4, 8  '   , ',', ';')
+    arr2 = carr4__create_array_from_string('3 , 10, 12, 18;' + &
+                                           '12, 1 , 4 , 9 ;'  + &
+                                           '9 , 10, 12, 2 ;' + &
+                                           '3 , 12, 4 , 10 '   , ',', ';')
+
+
+    sol_arr[1] = carr4__create_row_from_string('210, 267, 236, 271',',')
+    sol_arr[2] = carr4__create_row_from_string('93 , 149, 104, 149',',')
+    sol_arr[3] = carr4__create_row_from_string('171, 146, 172, 268',',')
+    sol_arr[4] = carr4__create_row_from_string('105, 169, 128, 169',',')
+
+    act_arr = carr4__mult(arr1, arr2)
+
+    RETURN(carr4__testing(sol_arr, act_arr))
+
+  END t_mult2
+
+ROUTINE t_det : BOOLEAN
+  VAR
+    arr1 : arry(t_carr4)
+    arr2 : arry(t_carr3)
+  BEGIN
+    arr1 = carr4__create_array_from_string('4,  3,  2, 2;' + &
+                                           '0,  1, -3, 3 ;'  + &
+                                           '0, -1,  3, 3 ;' + &
+                                           '0,  3,  1, 1 '   , ',', ';')
+    
+    arr2 = carr3__create_array_from_string('2,-3, 9; 2, 0,-1; 1, 4, 5', ',', ';')
+  
+    RETURN(kunit_eq_r(-240, carr4__det(arr1)) AND kunit_eq_r(113, carr3__det(arr2)))
+  END t_det
+
+ROUTINE t_cofactor : BOOLEAN
+  VAR
+    arr1 : arry(t_carr3)
+    act1 : arry(t_carr3)
+    sol1 : arry(t_carr3)
+  BEGIN
+    arr1 = carr3__create_array_from_string('2,-3, 9; 2, 0,-1; 1, 4, 5', ',', ';')
+
+    act1 = carr3__cofactor(arr1)
+
+    sol1[1] = carr3__create_row_from_string('4,-11,8',',')
+    sol1[2] = carr3__create_row_from_string('51,1,-11',',')
+    sol1[3] = carr3__create_row_from_string('3,20,6',',')
+  
+    RETURN(carr3__testing(sol1, act1))
+  END t_cofactor
+
+ROUTINE t_cofactor2 : BOOLEAN
+  VAR
+    arr1 : arry(t_carr4)
+    act1 : arry(t_carr4)
+    sol1 : arry(t_carr4)
+  BEGIN
+    arr1 = carr4__create_array_from_string('4,  3,  2, 2;' + &
+                                           '0,  1, -3, 3 ;'  + &
+                                           '0, -1,  3, 3 ;' + &
+                                           '0,  3,  1, 1 '   , ',', ';')
+
+    act1 = carr4__cofactor(arr1)
+
+    sol1[1] = carr4__create_row_from_string('-60,0,0,0',',')
+    sol1[2] = carr4__create_row_from_string('0,0,40,-40',',')
+    sol1[3] = carr4__create_row_from_string('18,24,-32,-40',',')
+    sol1[4] = carr4__create_row_from_string('66,-72,-24,0',',')
+  
+    RETURN(carr4__testing(sol1, act1))
+  END t_cofactor2
+
+ROUTINE t_inverse : BOOLEAN
+  VAR
+    arr1 : arry(t_carr3)
+    act1 : arry(t_carr3)
+    sol1 : arry(t_carr3)
+  BEGIN
+    arr1 = carr3__create_array_from_string('1,2,-1; 2,1,2; -1,2,1', ',', ';')
+
+    act1 = carr3__inverse(arr1)
+
+    sol1[1] = carr3__create_row_from_string('0.1875, 0.25, -0.3125',',')
+    sol1[2] = carr3__create_row_from_string('0.25, 0, 0.25',',')
+    sol1[3] = carr3__create_row_from_string('-0.3125, 0.25, 0.1875',',')
+  
+    RETURN(carr3__testing(sol1, act1))
+  END t_inverse
+
+ROUTINE t_inverse2 : BOOLEAN
+  VAR
+    arr1 : arry(t_carr4)
+    act1 : arry(t_carr4)
+    sol1 : arry(t_carr4)
+  BEGIN
+    arr1 = carr4__create_array_from_string('1, 4, 5, -1;' + &
+                                           '-2, 3, -1, 0;'  + &
+                                           '2, 1, 1, 0;' + &
+                                           '3, -1, 2, 1'   , ',', ';')
+
+    act1 = carr4__inverse(arr1)
+
+    sol1[1] = carr4__create_row_from_string('-0.1,-0.1,0.6,-0.1',',')
+    sol1[2] = carr4__create_row_from_string('0,0.25,0.25,0',',')
+    sol1[3] = carr4__create_row_from_string('0.2,-0.05,-0.45,0.2',',')
+    sol1[4] = carr4__create_row_from_string('-0.1,0.65,-0.65,0.9',',')
+  
+    RETURN(carr4__testing(sol1, act1))
+  END t_inverse2
+
 BEGIN
   -- 10 tests, 65 asserts
   kunit_test('test full init', t_full1) -- 10 assert
   kunit_test('test full init 2', t_full2) -- 30 assert
   kunit_test('test adding', t_add) -- 2 assert
+  kunit_test('test multiply', t_mult) -- 2 assert
+  kunit_test('test multiply', t_mult2) -- 7 assert
+  kunit_test('test determinant', t_det)
+  kunit_test('test cofactor', t_cofactor)
+  kunit_test('test cofactor', t_cofactor2)
+  kunit_test('test inverse', t_inverse)
+  kunit_test('test inverse 2', t_inverse2)
 
 
   kunit_done
