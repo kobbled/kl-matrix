@@ -47,6 +47,20 @@ ROUTINE matrix__linspace
     ENDFOR
   END matrix__linspace
 
+ROUTINE matrix__eye
+  VAR
+    i, j : INTEGER
+  BEGIN
+    FOR i=1 TO ARRAY_LEN(arr) DO
+      FOR j=1 TO ARRAY_LEN(row) DO
+        IF i=j THEN
+          arr[i,j] = 1
+        ELSE
+          arr[i,j] = 0
+        ENDIF
+      ENDFOR
+    ENDFOR
+  END matrix__eye
 
 ROUTINE matrix__shift_s
   VAR
