@@ -1,36 +1,9 @@
 PROGRAM test_matrix
 %NOLOCKGROUP
 
-
--- ** TYPES **
-%include define_type.m
-
-%define TYPE_CARR10 t_carr10
-%include carr10.klt
-t_arr2d_ref(t_rows,t_columns,TYPE_CARR10,inner_type)
-
-%define TYPE_CARR305 t_carr305
-%include carr305.klt
-t_arr2d_ref(t_rows,t_columns,TYPE_CARR305,inner_type)
-
-%define TYPE_CARR23 t_carr23
-%include carr23.klt
-t_arr2d_ref(t_rows,t_columns,TYPE_CARR23,inner_type)
-
--- ** FUNCTIONS **
-
 %include matrix.klh
 %include strings.klh
 %include kunit.klh
-
--- class carr10
-%class carr10('2dArray.klc','2dArray.klh','carr10.klt')
--- class carr305
-%class carr305('2dArray.klc','2dArray.klh','carr305.klt')
--- class carr23
-%class carr23('2dArray.klc','2dArray.klh','carr23.klt')
--- class for 2nd carr23
-%class carr232('2dArray.klc','2dArray.klh','carr23.klt')
 
 ROUTINE t_zeros1r : BOOLEAN
   VAR
@@ -88,72 +61,6 @@ ROUTINE t_eye2r : BOOLEAN
 
     RETURN(kunit_eq_2d(sol_row, row, sol_arr, arr))  
   END t_eye2r
-
-ROUTINE t_carr10 : BOOLEAN
-  VAR
-    act_arr : arry(TYPE_CARR10)
-    sol_arr : arry(TYPE_CARR10)
-    sol_row : arrx(TYPE_CARR10)
-    i,j : INTEGER
-    val : REAL
-  BEGIN
-    val = 100
-
-    FOR i=1 TO ARRAY_LEN(sol_arr) DO
-      FOR j=1 TO ARRAY_LEN(sol_row) DO
-        sol_row[j] = val
-      ENDFOR
-      sol_arr[i] = sol_row
-    ENDFOR
-
-    act_arr = carr10__full(val)
-
-    RETURN( carr10__testing(sol_arr, act_arr) )
-
-  END t_carr10
-
-ROUTINE t_2dadd : BOOLEAN
-  VAR
-    sol_arr : arry(TYPE_CARR23)
-    act_arr : arry(TYPE_CARR23)
-    arr1 : arry(TYPE_CARR23)
-    arr2 : arry(TYPE_CARR23)
-  BEGIN
-    arr1 = carr23__create_array_from_string('1,2,4;2,6,0', ',', ';')
-    arr2 = carr232__create_array_from_string('4,1,4;0,-1,3', ',', ';')
-
-    -- expected array
-    sol_arr[1] = carr23__create_row_from_string('5,3,8',',')
-    sol_arr[2] = carr23__create_row_from_string('2,5,3',',')
-
-    act_arr = carr23__add(arr1, arr2)
-
-    RETURN( carr23__testing(sol_arr, act_arr) )
-
-  END t_2dadd
-
-ROUTINE t_carr305 : BOOLEAN
-  VAR
-    act_arr : arry(TYPE_CARR305)
-    sol_arr : arry(TYPE_CARR305) 
-    sol_row : arrx(TYPE_CARR305)
-    i,j : INTEGER
-    val : REAL
-  BEGIN
-    val = 100
-
-    FOR i=1 TO ARRAY_LEN(sol_arr) DO
-      FOR j=1 TO ARRAY_LEN(sol_row) DO
-        sol_row[j] = val
-      ENDFOR
-      sol_arr[i] = sol_row
-    ENDFOR
-
-    act_arr = carr305__full(val)
-
-    RETURN( carr305__testing(sol_arr, act_arr) )
-
-  END t_carr305
 
 ROUTINE t_linspace : BOOLEAN
   VAR
@@ -229,11 +136,8 @@ BEGIN
   kunit_test('test_zeros_1d()', t_zeros1r) -- assert 1
   kunit_test('test_full_1d()', t_full1r) -- assert 1
   kunit_test('test_eye()', t_eye2r) --assert 1
-  kunit_test('test_full_carr10()', t_carr10) --assert 11
-  kunit_test('test_full_carr305()', t_carr305) --assert 31
   kunit_test('test linear space', t_linspace) --assert 2
   kunit_test('test ops on 1D rarrs', t_ops_1r) --assert 4
-  kunit_test('test 2d add', t_2dadd) --assert 2
   kunit_test('shift matrix', t_shift) --assert 2
 
   kunit_done

@@ -1,0 +1,112 @@
+PROGRAM test_matrix2
+%NOLOCKGROUP
+
+-- ** TYPES **
+%include define_type.m
+
+%include carr10.klt
+t_arr2d_ref(t_rows,t_columns,t_carr10,inner_type)
+
+%include carr305.klt
+t_arr2d_ref(t_rows,t_columns,t_carr305,inner_type)
+
+%include carr23.klt
+t_arr2d_ref(t_rows,t_columns,t_carr23,inner_type)
+
+%include carr3.klt
+t_arr2d_ref(t_rows,t_columns,t_carr3,inner_type)
+
+%include carr4.klt
+t_arr2d_ref(t_rows,t_columns,t_carr4,inner_type)
+
+
+VAR
+  act_305 : arry(t_carr305)
+  sol_305 : arry(t_carr305)
+
+
+%include kunit.klh
+
+-- class carr3
+%class carr3('2dArray.klc','2dArray.klh','carr3.klt')
+-- class carr4
+%class carr4('2dArray.klc','2dArray.klh','carr4.klt')
+
+-- class carr10
+%class carr10('2dArray.klc','2dArray.klh','carr10.klt')
+-- class carr305
+%class carr305('2dArray.klc','2dArray.klh','carr305.klt')
+-- class carr23
+%class carr23('2dArray.klc','2dArray.klh','carr23.klt')
+
+
+ROUTINE t_full1 : BOOLEAN
+  VAR
+    act_arr : arry(t_carr10)
+    sol_arr : arry(t_carr10)
+    i,j : INTEGER
+    val : REAL
+  BEGIN
+    val = 100
+
+    --solution for arr1
+    FOR i=1 TO 10 DO
+      FOR j=1 TO 10 DO
+        sol_arr[i,j] = val
+      ENDFOR
+    ENDFOR
+
+    carr10__full(val, act_arr)
+
+    RETURN( carr10__testing(sol_arr, act_arr) )
+
+  END t_full1
+
+ROUTINE t_full2 : BOOLEAN
+  VAR
+    i,j : INTEGER
+    val : REAL
+  BEGIN
+    val = 100
+
+    --solution for arr2
+    FOR i=1 TO 30 DO
+      FOR j=1 TO 5 DO
+        sol_305[i,j] = val
+      ENDFOR
+    ENDFOR
+
+    carr305__full(val, act_305)
+
+    RETURN( carr305__testing(sol_305, act_305) )
+
+  END t_full2
+
+ROUTINE t_add : BOOLEAN
+  VAR
+    sol_arr : arry(t_carr23)
+    act_arr : arry(t_carr23)
+    arr1 : arry(t_carr23)
+    arr2 : arry(t_carr23)
+  BEGIN
+    arr1 = carr23__create_array_from_string('1,2,4;2,6,0', ',', ';')
+    arr2 = carr23__create_array_from_string('4,1,4;0,-1,3', ',', ';')
+
+    -- expected array
+    sol_arr[1] = carr23__create_row_from_string('5,3,8',',')
+    sol_arr[2] = carr23__create_row_from_string('2,5,3',',')
+
+    act_arr = carr23__add(arr1, arr2)
+
+    RETURN( carr23__testing(sol_arr, act_arr) )
+
+  END t_add
+BEGIN
+  -- 10 tests, 65 asserts
+  kunit_test('test full init', t_full1) -- 10 assert
+  kunit_test('test full init 2', t_full2) -- 30 assert
+  kunit_test('test adding', t_add) -- 2 assert
+
+
+  kunit_done
+END test_matrix2

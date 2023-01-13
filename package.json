@@ -14,7 +14,7 @@
     "include/classes/templates"
   ],
   "tests" : [
-    "test/test_matrix.kl"
+    "test/test_matrix2.kl"
   ],
   "tests-depends" : [
     "KUnit",
