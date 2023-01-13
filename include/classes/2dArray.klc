@@ -14,6 +14,13 @@ t_arr2d_ref(t_rows,t_columns,type_name,inner_type)
 %include errors.klt
 %include matrix.klt
 
+-- VARS
+%ifdef UNIT_TESTING
+VAR
+  error_msg : STRING[254]
+%endif
+
+
 %from math.klh %import srand, rand, rand_int
 %from strings.klh %import r_to_s, i_to_s, s_to_arr, s_to_iarr, s_to_rarr
 %include errors.klh
@@ -405,10 +412,10 @@ ROUTINE transpose_
 
 ROUTINE test_row
   VAR
+%define EPSILON 0.005
     n, i : INTEGER
     ok : BOOLEAN
     assrtn_count : INTEGER
-    error_msg : STRING[254]
     ent, status : INTEGER
   BEGIN
     ok = TRUE
@@ -424,16 +431,17 @@ ROUTINE test_row
       -- shape
       IF (n <= ARRAY_LEN(expected)) THEN
         -- handle uninitialized
-        IF UNINIT(actual[n]) THEN
-          error_msg = 'Expected ' + type_convert_f(expected[n]) + ' but got UNINIT'
-          RETURN(false)
-        ENDIF
+        IF NOT (UNINIT(actual[n]) AND UNINIT(expected[n])) THEN
+          IF UNINIT(actual[n]) THEN
+            error_msg = 'Expected ' + type_convert_f(expected[n]) + ' but got UNINIT'
+            RETURN(false)
+          ENDIF
 
-        IF expected[n] <> actual[n] THEN
-          ok = FALSE
-          GO TO skiploop
+          IF ABS(expected[n] - actual[n]) > EPSILON THEN
+            ok = FALSE
+            GO TO skiploop
+          ENDIF
         ENDIF
-
       ENDIF
     ENDFOR
 
@@ -442,7 +450,7 @@ ROUTINE test_row
     IF ok THEN
       RETURN(true)
     ELSE
-      error_msg = 'Expected ' + type_convert_f(expected[n]) + ' but got ' + type_convert_f(actual[n]) + &
+      error_msg = error_msg + 'Expected ' + type_convert_f(expected[n]) + ' but got ' + type_convert_f(actual[n]) + &
                   ', on index ' + i_to_s(i) + ' of array.'
       RETURN(false)
     ENDIF
@@ -453,11 +461,12 @@ ROUTINE testing
     actual_row : arrx(type_name)
     expect_row : arrx(type_name)
     b : BOOLEAN
-    error_msg : STRING[254]
     i, ent, status : INTEGER
   BEGIN
+    error_msg = ''
+
     IF ARRAY_LEN(expected) > ARRAY_LEN(actual) THEN
-      error_msg = 'rows are not the same size'
+      error_msg = error_msg + 'rows are not the same size'
       SET_VAR(ent, 'kunit', 'error_msg', error_msg, status)
       CHK_STAT(status)
       RETURN(false)
@@ -470,7 +479,7 @@ ROUTINE testing
 
       b = test_row(expect_row, actual_row)
       IF b = FALSE THEN
-        error_msg = 'Row ' + i_to_s(i) + 'is not equal.'
+        error_msg = error_msg + 'Row ' + i_to_s(i) + ' is not equal.'
         SET_VAR(ent, 'kunit', 'error_msg', error_msg, status)
         CHK_STAT(status)
         RETURN(false)
