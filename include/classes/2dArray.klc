@@ -250,9 +250,13 @@ ROUTINE mult
       row1 = arr1[i]
       FOR j=1 TO t_columns DO
         row2 = trans[j]
-        out_arr[i,j] = dot_(row1, row2)
+        IF (NOT UNINIT(row2[1])) AND (NOT UNINIT(row1[1])) THEN
+          out_arr[i,j] = dot_(row1, row2)
+        ENDIF
       ENDFOR
     ENDFOR
+
+    RETURN(out_arr)
   END mult
 
 ROUTINE transpose
