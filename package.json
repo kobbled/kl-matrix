@@ -10,7 +10,8 @@
   ],
   "includes" : [
     "include",
-    "include/classes"
+    "include/classes",
+    "include/classes/templates"
   ],
   "tests" : [
     "test/test_matrix.kl"
