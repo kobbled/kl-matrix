@@ -59,6 +59,12 @@ declare_member(class_name,mult,class_name,mult)
 ROUTINE mult (arr1  : arry(type_name); arr2  : arry(type_name)) : arry(type_name) FROM class_name
 declare_member(class_name,transpose,class_name,trnp)
 ROUTINE transpose(arr  : arry(type_name))  : arry(type_name) FROM class_name
+declare_member(class_name,inverse,class_name,inv)
+ROUTINE inverse(arr  : arry(type_name))  : arry(type_name) FROM class_name
+declare_member(class_name,det,class_name,det)
+ROUTINE det(arr : arry(type_name)) : inner_type FROM class_name
+declare_member(class_name,cofactor,class_name,cfct)
+ROUTINE cofactor(arr : arry(type_name)) : arry(type_name) FROM class_name
 declare_member(class_name,trace,class_name,trac)
 ROUTINE trace(arr  : arry(type_name))  : inner_type FROM class_name
 %endif
