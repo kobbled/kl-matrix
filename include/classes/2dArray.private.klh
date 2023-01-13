@@ -3,5 +3,8 @@ ROUTINE operations_(operation : INTEGER; arr1  : arry(type_name); arr2  : arry(t
 ROUTINE multiply_(arr1  : arry(type_name); arr2  : arry(type_name); out_arr : arry(type_name)) FROM class_name
 
 ROUTINE dot_(row1 : arrx(type_name); row2 : arrx(type_name)) : inner_type FROM class_name
-ROUTINE transpose_(arr : arry(type_name); out_arr : arry(type_name)) FROM class_name
 
+-- only works for square matrices
+%ifeq t_rows t_columns
+ROUTINE transpose_(arr : arry(type_name); out_arr : arry(type_name)) FROM class_name
+%endif

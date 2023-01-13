@@ -11,8 +11,6 @@ PROGRAM class_name
 
 t_arr2d_ref(t_rows,t_columns,type_name,inner_type)
 
--- VARS
-
 %include errors.klt
 %include matrix.klt
 
@@ -53,16 +51,20 @@ ROUTINE create_array_from_string
     s_to_arr(sarr, row_delim, row_str)
 
     FOR i=1 TO ARRAY_LEN(row_str) DO
+      IF NOT UNINIT(row_str[i]) THEN
 %ifeq inner_type INTEGER
-      s_to_iarr(row_str[i], col_delim, row)
+        s_to_iarr(row_str[i], col_delim, row)
 %endif
 %ifeq inner_type REAL
-      s_to_rarr(row_str[i], col_delim, row)
+        s_to_rarr(row_str[i], col_delim, row)
 %endif
-      FOR j=1 TO ARRAY_LEN(subrow) DO
-        subrow[j] = row[j]
-      ENDFOR
-      out_arr[i] = subrow 
+        FOR j=1 TO ARRAY_LEN(subrow) DO
+          IF NOT UNINIT(row[j]) THEN
+            subrow[j] = row[j]
+          ENDIF
+        ENDFOR
+        out_arr[i] = subrow
+      ENDIF
     ENDFOR
 
     RETURN(out_arr)
@@ -172,53 +174,31 @@ ROUTINE convert_to_array
 
 -- initializations
 ROUTINE full
-  VAR
-    out_arr : arry(type_name)
   BEGIN
     init_ (OP_FULL, number, out_arr)
-    RETURN(out_arr)
   END full
 
 ROUTINE zeros
-  VAR
-    out_arr : arry(type_name)
   BEGIN
     init_ (OP_ZEROS, 0, out_arr)
-    RETURN(out_arr)
   END zeros
 
 ROUTINE ones
-  VAR
-    out_arr : arry(type_name)
   BEGIN
     init_ (OP_ONES, 0, out_arr)
-    RETURN(out_arr)
   END ones
 
 ROUTINE eye
-  VAR
-    out_arr : arry(type_name)
   BEGIN
     init_ (OP_EYE, 0, out_arr)
-    RETURN(out_arr)
   END eye
 
 ROUTINE random
-  VAR
-    out_arr : arry(type_name)
   BEGIN
     init_ (OP_RANDOM, 0, out_arr)
-    RETURN(out_arr)
   END random
 
 --operations
-ROUTINE transpose
-  VAR
-    trans : arry(type_name)
-  BEGIN
-    transpose_(arr, trans)
-    RETURN(trans)
-  END transpose
 
 ROUTINE add
   VAR
@@ -245,6 +225,9 @@ ROUTINE smult
     RETURN(out_arr)
   END smult
 
+-- only works for square matrices
+%ifeq t_rows t_columns
+
 ROUTINE mult
   VAR
     out_arr : arry(type_name)
@@ -264,6 +247,30 @@ ROUTINE mult
       ENDFOR
     ENDFOR
   END mult
+
+ROUTINE transpose
+  VAR
+    trans : arry(type_name)
+  BEGIN
+    transpose_(arr, trans)
+    RETURN(trans)
+  END transpose
+
+ROUTINE trace
+  VAR
+    sum : inner_type
+    i : INTEGER
+  BEGIN
+
+    sum = 0
+    FOR i=1 TO ARRAY_LEN(arr) DO
+      sum = sum + arr[i,i]
+    ENDFOR
+
+    RETURN(sum)
+  END trace
+
+%endif
 
 -- private
 ROUTINE init_
@@ -349,21 +356,6 @@ ROUTINE operations_
     ENDFOR
   END operations_
 
-ROUTINE transpose_
-  VAR
-    row   : arrx(type_name)
-    i, j : INTEGER
-  BEGIN
-    FOR i=1 TO t_columns DO
-      FOR j=1 TO t_rows DO
-        row[j] = arr[j,i]
-      ENDFOR
-
-      out_arr[i] = row
-    ENDFOR
-
-  END transpose_
-
 ROUTINE dot_
   VAR
     i : INTEGER
@@ -376,6 +368,37 @@ ROUTINE dot_
 
     RETURN(out)
   END dot_
+
+-- only works for square matrices
+%ifeq t_rows t_columns
+
+ROUTINE transpose_
+  VAR
+    row   : arrx(type_name)
+    trans : arry(type_name)
+    i, j : INTEGER
+    temp : arrx(type_name)
+  BEGIN
+    FOR i=1 TO t_columns DO
+      FOR j=1 TO t_rows DO
+        temp = arr[j]
+        IF (NOT UNINIT(temp[i])) THEN
+          row[j] = arr[j,i]
+        ENDIF
+      ENDFOR
+
+      IF (NOT UNINIT(temp[i])) THEN
+        out_arr[i] = row
+      ENDIF
+    ENDFOR
+
+  END transpose_
+
+  VAR
+  BEGIN
+    ENDFOR
+
+%endif
 
 -- testing routines
 %ifdef UNIT_TESTING

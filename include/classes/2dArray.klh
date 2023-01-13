@@ -34,19 +34,17 @@ ROUTINE convert_to_array(in_arr : arry(type_name); out_arr : ARRAY[*,*] OF inner
 
 --initalizations
 declare_member(class_name,full,class_name,full)
-ROUTINE full (number : inner_type) : arry(type_name) FROM class_name
+ROUTINE full (number : inner_type; out_arr : arry(type_name)) FROM class_name
 declare_member(class_name,zeros,class_name,zero)
-ROUTINE zeros : arry(type_name) FROM class_name
+ROUTINE zeros(out_arr : arry(type_name)) FROM class_name
 declare_member(class_name,ones,class_name,ones)
-ROUTINE ones : arry(type_name) FROM class_name
+ROUTINE ones(out_arr : arry(type_name)) FROM class_name
 declare_member(class_name,random,class_name,rand)
-ROUTINE random : arry(type_name)  FROM class_name
+ROUTINE random(out_arr : arry(type_name)) FROM class_name
 declare_member(class_name,eye,class_name,eye)
-ROUTINE eye : arry(type_name)  FROM class_name
+ROUTINE eye(out_arr : arry(type_name))  FROM class_name
 
 --operations
-declare_member(class_name,transpose,class_name,trnp)
-ROUTINE transpose(arr  : arry(type_name))  : arry(type_name) FROM class_name
 
 declare_member(class_name,add,class_name,add)
 ROUTINE add (arr1  : arry(type_name); arr2  : arry(type_name)) : arry(type_name) FROM class_name
@@ -54,11 +52,16 @@ declare_member(class_name,subtract,class_name,subt)
 ROUTINE subtract (arr1  : arry(type_name); arr2  : arry(type_name)) : arry(type_name) FROM class_name
 declare_member(class_name,smult,class_name,smlt)
 ROUTINE smult (arr  : arry(type_name); val : inner_type) : arry(type_name) FROM class_name
+
+-- only works for square matrices
+%ifeq t_rows t_columns
 declare_member(class_name,mult,class_name,mult)
 ROUTINE mult (arr1  : arry(type_name); arr2  : arry(type_name)) : arry(type_name) FROM class_name
-
+declare_member(class_name,transpose,class_name,trnp)
+ROUTINE transpose(arr  : arry(type_name))  : arry(type_name) FROM class_name
 declare_member(class_name,trace,class_name,trac)
 ROUTINE trace(arr  : arry(type_name))  : inner_type FROM class_name
+%endif
 
 --testing routines
 %ifdef UNIT_TESTING
