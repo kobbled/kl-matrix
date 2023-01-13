@@ -28,6 +28,13 @@ ROUTINE set_from_array(in_arr : ARRAY[*,*] OF inner_type; out_arr : arry(type_na
 declare_member(class_name,set_row_from_array,class_name,srfa)
 ROUTINE set_row_from_array(in_row : ARRAY[*] OF inner_type; row_idx : INTEGER; out_arr : arry(type_name)) FROM class_name
 
+-- getters
+-- only works for square matrices
+%ifeq t_rows t_columns
+declare_member(class_name,get_col,class_name,getc)
+ROUTINE get_col(col_idx : INTEGER; arr : arry(type_name)) : arrx(type_name) FROM class_name
+%endif
+
 -- conversions
 declare_member(class_name,convert_to_array,class_name,cvar)
 ROUTINE convert_to_array(in_arr : arry(type_name); out_arr : ARRAY[*,*] OF inner_type) FROM class_name

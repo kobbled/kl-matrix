@@ -158,6 +158,19 @@ ROUTINE set_row_from_array
 
   END set_row_from_array
 
+--getters
+-- only works for square matrices
+%ifeq t_rows t_columns
+ROUTINE get_col 
+  VAR
+    trans : arry(type_name)
+  BEGIN
+    transpose_(arr, trans)
+
+    RETURN(trans[col_idx])
+  END get_col
+%endif
+
 --conversions
 ROUTINE convert_to_array
   VAR
